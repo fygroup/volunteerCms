@@ -30,60 +30,76 @@
 </template>
 
 <script>
+import { getCookie, setCookie } from "@/util/cookie";
+import { login } from "api/login/index";
 export default {
-  data() {
-    var validateName = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("请输入账号"));
-      }
-      setTimeout(() => {
-        callback();
-      }, 100);
-    };
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      }
-      setTimeout(() => {
-        callback();
-      }, 100);
-    };
-    return {
-      ruleForm2: {
-        pass: "",
-        name: "",
-      },
-      rules2: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        name: [{ validator: validateName, trigger: "blur" }]
-      }
-    };
-  },
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    data() {
+        var validateName = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error("请输入账号"));
+            }
+            setTimeout(() => {
+                callback();
+            }, 100);
+        };
+        var validatePass = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请输入密码"));
+            }
+            setTimeout(() => {
+                callback();
+            }, 100);
+        };
+        return {
+            ruleForm2: {
+                pass: "",
+                name: ""
+            },
+            rules2: {
+                pass: [{ validator: validatePass, trigger: "blur" }],
+                name: [{ validator: validateName, trigger: "blur" }]
+            }
+        };
     },
-  }
+    methods: {
+        submitForm(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    let params = {
+                        userName:this.ruleForm2.name,
+                        passWord:this.ruleForm2.pass,
+                    };
+                    login(params).then(response => {
+                        if(response.data.status==200){
+                            let expireDays = 1000 * 60 * 60;
+                            setCookie("user_id",response.data.data.user_id,expireDays);
+                            this.$router.push({ path: '/home/resident' });
+                        }else {
+                            this.$alert(response.data.msg, '温馨提示', {
+                                confirmButtonText: '确定',
+                                callback: action => {}
+                            });
+                        }
+                    })
+                } else {
+                    console.log("error submit!!");
+                    return false;
+                }
+            });
+        }
+    }
 };
 </script>
 
 <style lang="stylus">
 .__login {
     padding: 110px 0;
-
     .main {
         width: 375px;
         margin: 0 auto;
         box-sizing: border-box;
         .main-header {
-            text-align center;
+            text-align: center;
             h2 {
                 margin-bottom: 10px;
                 font-weight: 300;
@@ -96,8 +112,8 @@ export default {
             }
         }
         .main-contern {
-            margin-top 40px;
-            padding 0 20px;
+            margin-top: 40px;
+            padding: 0 20px;
         }
     }
 }

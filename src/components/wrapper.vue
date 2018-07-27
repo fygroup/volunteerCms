@@ -56,14 +56,14 @@ export default {
 		box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 		-webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 		-moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
-		z-index: 99;
+		z-index: 8;
 	}
 	.sidebar {
 		position: fixed;
 		width: 220px;
 		top: 0;
 		bottom: 0;
-		z-index: 1001;
+		z-index: 9;
 		background #20222A;
 		overflow-x: hidden;
 		padding-bottom: 10000px;
@@ -135,7 +135,7 @@ export default {
 		line-height: 50px;
 		background-color: #fff;
 		text-align center;
-		z-index 99;
+		z-index 9;
 		box-shadow: 1px 1px 2px 1px rgba(0,0,0,.15);
 		-webkit-box-shadow: 1px 1px 2px 1px rgba(0,0,0,.15);
 		-moz-box-shadow: 1px 1px 2px 1px rgba(0,0,0,.15);

@@ -13,17 +13,10 @@
                 background-color="#20222a"
                 text-color="#fff"
                 active-text-color="#fff">
-                    <el-submenu v-for="(item,index) in sidebarMenu" :key="index" :index="''+(index+1)">
-                        <template slot="title">
-                            <i :class="item.parentItem.icon"></i>
-                            <span>{{item.parentItem.name}}</span>
-                        </template>
-                        <el-menu-item-group v-if="item.childItem">
-                            <el-menu-item v-for="(itemList,indexList) in item.childItem" :key="indexList" :index="''+itemList.path">
-                                {{itemList.name}}
-                            </el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
+                    <el-menu-item v-for="(item,index) in sidebarMenu" :key="index" :index="item.path">
+                        <i :class="item.icon"></i>
+                        <span slot="title">{{item.name}}</span>
+                    </el-menu-item>
                 </el-menu>
             </el-col>
         </el-row>
@@ -39,37 +32,11 @@ export default {
             defaultActive: this.$route.path,
             openeds: ['1'],
             sidebarMenu: [
-                {
-                    parentItem: { name: '内容管理', icon: 'el-icon-location' },
-                    childItem: [
-                        { name: '文章管理', path: '/home/contern/article' },
-                        { name: '视频管理', path: '/home/contern/article' },
-                        { name: '栏目管理', path: '/home/contern/column' },
-                        { name: '活动管理', path: '/home/contern/activity' },
-                        { name: '任务管理', path: '/home/contern/task' },
-                        { name: '公告管理', path: '/home/contern/notice' },
-                    ],
-                },
-                {
-                    parentItem: { name: '社区管理', icon: 'el-icon-location' },
-                    childItem: [
-                        { name: '社区管理', path: '/home/community/organization' },
-                        { name: '居民管理', path: '/home/community/personnel' },
-                    ],
-                },
-                {
-                    parentItem: { name: '商品管理', icon: 'el-icon-location' },
-                    childItem: [
-                        { name: '商品管理', path: '/home/goods/goodsList' },
-                    ],
-                },
-                {
-                    parentItem: { name: '权限管理', icon: 'el-icon-location' },
-                    childItem: [
-                        { name: '管理员', path: '/home/power/powerUser' },
-                        { name: '权限组', path: '/home/power/powerPowerGroup' },
-                    ],
-                }
+                { name: '居民管理', icon: 'el-icon-location', path: '/home/resident' },
+                { name: '志愿者管理', icon: 'el-icon-location', path: '/home/volunteer' },
+                { name: '活动管理', icon: 'el-icon-location', path: '/home/activity' },
+                { name: '预约管理', icon: 'el-icon-location', path: '/home/order' },
+                { name: '热线管理', icon: 'el-icon-location', path: '/home/hotline' },
             ]
         }
     },
@@ -86,15 +53,8 @@ export default {
 
 <style lang="stylus">
 .sidebar {
-    .el-menu-item-group__title {
-        padding 0px;
-    }
-    .el-submenu .el-menu-item {
-        background #16181d !important
-    }
-    .el-submenu .is-active {
+    .el-menu-item.is-active {
         background #1E9FFF !important
     }
-    
 }
 </style>
