@@ -39,6 +39,7 @@
                     <el-form-item label="出生日期" prop="birthday" class="form-control">
                         <el-date-picker
                             v-model="ruleForm.birthday"
+                            value-format="yyyy-MM-dd"
                             type="date"
                             placeholder="请选择出生日期">
                         </el-date-picker>
@@ -147,15 +148,21 @@ export default {
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-                    if(this.fileArr && this.fileArr.length==0){
-                        this.paramsList(this.ruleForm.head_url)
-                    }else {
-                        uploadFile(this.fileArr).then(data => {
-                            if(data.data.status==200){
-                                this.paramsList(data.data.msg)
-                            }
-                        })
-                    }
+                    console.log(this.fileArr)
+                    uploadFile(this.fileArr).then(data => {
+                        if(data.data.status==200){
+                            debugger
+                        }
+                    })
+                    // if(this.fileArr && this.fileArr.length==0){
+                    //     this.paramsList(this.ruleForm.head_url)
+                    // }else {
+                    //     uploadFile(this.fileArr).then(data => {
+                    //         if(data.data.status==200){
+                    //             this.paramsList(data.data.msg)
+                    //         }
+                    //     })
+                    // }
 				} else {
                     return false;
 				}

@@ -12,6 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/wxbacksys/': {
+        //target: 'localhost:8005/wxbacksys/',
         target: 'http://47.106.163.198:8081/',
         changeOrigin: true
       },
