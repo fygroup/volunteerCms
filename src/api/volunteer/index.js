@@ -15,6 +15,16 @@ export function queryVolunteerTeamList(params) {
 
 
 
+/*查看志愿者团队详情*/
+export function queryVolunteerTeam(params) {
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'volunteerTeam/queryVolunteerTeam.do', params).then(data => {
+            resolve(data)
+        })
+    })
+}
+
+
 /*新增志愿者团队*/
 export function addVolunteerTeam(params) {
     return new Promise((resolve, reject) => {
