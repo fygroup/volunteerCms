@@ -30,6 +30,9 @@
                     <el-form-item label="服务类型" prop="service_type" class="form-control">
                         <el-input v-model="ruleForm.service_type" placeholder="请输入服务类型"></el-input>
                     </el-form-item>
+                    <el-form-item label="加入方式" prop="join_type" class="form-control">
+                        <el-input v-model="ruleForm.join_type" placeholder="请输入加入方式"></el-input>
+                    </el-form-item>
                     <el-form-item label="招募时间" prop="recruit_starttime" class="form-control">
                         <el-date-picker
                             v-model="ruleForm.recruit_starttime"
@@ -82,6 +85,7 @@ export default {
                 service_time: '',
                 introduction: '',
                 pictureList: [],
+                join_type: '',
                 head_url: []
             },
             rules: {
@@ -100,6 +104,9 @@ export default {
                 ],
                 service_time: [
                     { required: true, message: "请选择服务时间", trigger: "change" },
+                ],
+                join_type: [
+                    { required: true, message: "请输入加入方式", trigger: "blur" },
                 ]
 			}
         }
@@ -143,14 +150,14 @@ export default {
                 name: this.ruleForm.name,
                 type: this.ruleForm.type,
                 service_type: this.ruleForm.service_type,
+                join_type: this.ruleForm.join_type,
                 recruit_starttime: this.ruleForm.recruit_starttime[0],
                 recruit_endtime: this.ruleForm.recruit_starttime[1],
                 service_time: this.ruleForm.service_time,
                 introduction: this.ruleForm.introduction,
                 pictureList: [],
             };
-            console.log(params)
-            debugger
+            console.log(JSON.stringify(params))
             addVolunteerTeam(params).then(data => { 
                 if(data.data.status==200){
                     this.$alert("提交成功！", '温馨提示',

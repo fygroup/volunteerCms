@@ -2,23 +2,12 @@
     <div class="__volunteer">
         <div class="formBox">
             <el-form :inline="true" ref="formInline" :model="formInline" class="demo-form-inline">
-                <el-form-item label="姓名：">
+                <el-form-item label="服务队名称：">
                     <el-input v-model="formInline.real_name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码：">
-                    <el-input v-model="formInline.phone" placeholder="请输入手机号码"></el-input>
-                </el-form-item>
-                <el-form-item label="性别：">
-                    <el-select v-model="formInline.sex" placeholder="请选择性别">
-                        <el-option label="男" value="1"></el-option>
-                        <el-option label="女" value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="用户标签：">
-                    <el-select v-model="formInline.role" placeholder="请选择用户标签">
-                        <el-option label="普通用户" value="1"></el-option>
-                        <el-option label="志愿者团队管理员" value="2"></el-option>
-                        <el-option label="社区管理员" value="3"></el-option>
+                <el-form-item label="服务类别：">
+                    <el-select v-model="formInline.typeId" placeholder="请选择服务类别">
+                        <el-option :label="item.name" :value="item.uuid" v-for="(item,index) in typeCodeList" :key="index"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -30,7 +19,7 @@
             <el-button type="primary" icon="el-icon-circle-plus-outline" @click="onClickAdd">新增</el-button>
         </div>
         <div class="tableList">
-            <vtable :dataArray="dataArray" :columns="columns" :total="total" :isSelection="isSelection" @getArticle="queryUserListPost"></vtable>
+            <vtable :dataArray="dataArray" :columns="columns" :total="total" :isSelection="isSelection" @getArticle="queryVolunteerListPost"></vtable>
         </div>
     </div>
 </template>
@@ -40,6 +29,7 @@ import table from '@/components/common/table'
 import MyDropDown from '@/components/common/MyDropDown'
 import { getCookie, setCookie } from "@/util/cookie";
 import { queryVolunteerTeamList } from "api/volunteer/index";
+import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
 export default {
     components: {
         vtable: table
@@ -48,10 +38,9 @@ export default {
         return {
             formInline: {
                 real_name: '',
-                phone: '',
-                sex: '',
-                role: ''
+                typeId: '',
             },
+            typeCodeList: [],
             dataArray: [],
             pageSize: 10,
             pageNum: 1,
@@ -59,62 +48,16 @@ export default {
             isSelection: false,
             columns: [
                 {
-                    prop: "nick_name",
-                    label: "用户昵称",
-                    width: ""
+                    prop: "name",
+                    label: "服务队名称",
                 },
                 {
-                    prop: "real_name",
-                    label: "姓名",
-                    width: ""
+                    prop: "type_name",
+                    label: "服务类别",
                 },
                 {
-                    prop: "sex",
-                    label: "性别",
-                    width: "",
-                    render: function(createElement) {
-                        if(this.row.sex==1){
-                            return createElement('span', {
-                                domProps: {
-                                    innerHTML: '男',
-                                }
-                            })
-                        }else if(this.row.sex==2){
-                            return createElement('span', {
-                                domProps: {
-                                    innerHTML: '女',
-                                }
-                            })
-                        }
-                    },
-                },
-                {
-                    prop: "phone",
-                    label: "手机号码",
-                    width: ""
-                },
-                {
-                    prop: "card_number",
-                    label: "身份证号码",
-                    width: ""
-                },
-                {
-                    prop: "is_authentication",
-                    label: "是否实名",
-                    width: "",
-                    render: function(h, param) {
-                        let html = "";
-                        if(param.row.sex == 1) {
-                            html = "是";
-                        } else if(param.row.sex == 2) {
-                            html = "否";
-                        }
-                        return html;
-                    }
-                },
-                {
-                    prop: "role",
-                    label: "用户标签",
+                    prop: "create_time",
+                    label: "成立时间",
                     width: ""
                 },
                 {
@@ -155,14 +98,20 @@ export default {
         }
     },
     mounted() {
-        this.queryVolunteerListPost(this.pageNum);
+        this.queryVolunteerListPost(this.pageNum, '', '');
+        this.queryTypeDetailByTypeCodePost();
     },
     methods: {
-        searchSubmit(formName) {
-            this.queryVolunteerListPost(this.pageNum, this.formInline.real_name, this.formInline.phone, this.formInline.sex, this.formInline.role,);
-            // this.$nextTick(function() {
-            //     this.$refs["formReset"].resetFields();
-            // })
+        //查询服务类型明细
+        queryTypeDetailByTypeCodePost(){
+            queryTypeDetailByTypeCode({code: 'fwlx'}).then(data => {
+                if(data.data.status==200){
+                    this.typeCodeList = data.data.data
+                }
+            })
+        },
+        searchSubmit() {
+            this.queryVolunteerListPost(this.pageNum, this.formInline.real_name, this.formInline.typeId );            
         },
         onClickAdd() {
             this.$router.push({path: '/home/volunteerAdd?type=1' })
@@ -172,14 +121,12 @@ export default {
             this.$router.push({path: '/home/volunteerAdd?uuid='+obj+'' })
         },
         //查询列表
-        queryVolunteerListPost(pageNum, real_name, phone, sex, role) {
+        queryVolunteerListPost(pageNum, name, type) {
             let params = {
                 pageSize: this.pageSize,
                 pageNum: pageNum,
-                real_name: real_name,
-                phone: phone,
-                sex: sex,
-                role: role,
+                name: name,
+                type: type,
             };
             queryVolunteerTeamList(params).then(data => {
                 if(data.data.status==200){

@@ -61,17 +61,14 @@ export default {
                 {
                     prop: "nick_name",
                     label: "用户昵称",
-                    width: ""
                 },
                 {
                     prop: "real_name",
                     label: "姓名",
-                    width: ""
                 },
                 {
                     prop: "sex",
                     label: "性别",
-                    width: "",
                     render: function(createElement) {
                         if(this.row.sex==1){
                             return createElement('span', {
@@ -91,31 +88,54 @@ export default {
                 {
                     prop: "phone",
                     label: "手机号码",
-                    width: ""
                 },
                 {
                     prop: "card_number",
                     label: "身份证号码",
-                    width: ""
                 },
                 {
                     prop: "is_authentication",
                     label: "是否实名",
-                    width: "",
-                    render: function(h, param) {
-                        let html = "";
-                        if(param.row.sex == 1) {
-                            html = "是";
-                        } else if(param.row.sex == 2) {
-                            html = "否";
+                    render: function(createElement) {
+                        if(this.row.is_authentication==1){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '是',
+                                }
+                            })
+                        }else if(this.row.is_authentication==2){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '否',
+                                }
+                            })
                         }
-                        return html;
                     }
                 },
                 {
                     prop: "role",
-                    label: "用户标签",
-                    width: ""
+                    label: "角色",
+                    render: function(createElement) {
+                        if(this.row.role==1){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '普通用户',
+                                }
+                            })
+                        }else if(this.row.role==2){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '志愿者团队管理员',
+                                }
+                            })
+                        }else if(this.row.role==3){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '社区管理员',
+                                }
+                            })
+                        }
+                    }
                 },
                 {
                     prop: "",

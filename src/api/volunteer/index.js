@@ -1,5 +1,6 @@
 import { path } from '@/path/path'
 import axiosToken from '@/util/axiosToken'
+import axiosTokenJson from '@/util/axiosTokenJson'
 
 
 /*查询志愿者团队列表*/
@@ -17,7 +18,7 @@ export function queryVolunteerTeamList(params) {
 /*新增志愿者团队*/
 export function addVolunteerTeam(params) {
     return new Promise((resolve, reject) => {
-        axiosToken.post(path + 'volunteerTeam/addVolunteerTeam.do', params).then(data => {
+        axiosTokenJson.post(path + 'volunteerTeam/addVolunteerTeam.do', params).then(data => {
             resolve(data)
         })
     })
