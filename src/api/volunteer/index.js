@@ -47,7 +47,14 @@ export function queryTypeDetailByTypeCode(params) {
 
 
 
-
+/*设置志愿者团队管理员*/
+export function addVTeamUser(params) {
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'vteamuser/addVTeamUser.do', params).then(data => {
+            resolve(data)
+        })
+    })
+}
 
 
 

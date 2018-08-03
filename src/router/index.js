@@ -7,8 +7,10 @@ import wrapper from '@/components/wrapper';
 import resident from '@/components/modular/resident';//居民管理
 import residentAdd from '@/components/modular/residentAdd';//居民管理
 import volunteer from '@/components/modular/volunteer';//志愿者管理
-import volunteerAdd from '@/components/modular/volunteerAdd';//志愿者管理
+import volunteerAdd from '@/components/modular/volunteerAdd';//新增志愿者
+import volunteerUser from '@/components/modular/volunteerUser';//设置负责人
 import activity from '@/components/modular/activity';//活动管理
+import activityAdd from '@/components/modular/activityAdd';//活动管理
 import order from '@/components/modular/order';//预约管理
 import hotline from '@/components/modular/hotline';//热线管理
 
@@ -29,7 +31,9 @@ export default new Router({
 				{ path: '/home/residentAdd', name: '新增居民', component: residentAdd },
 				{ path: '/home/volunteer', name: '志愿者管理', component: volunteer },
 				{ path: '/home/volunteerAdd', name: '新增志愿者', component: volunteerAdd },
+				{ path: '/home/volunteerUser', name: '设置负责人', component: volunteerUser },
 				{ path: '/home/activity', name: '活动管理', component: activity },
+				{ path: '/home/activityAdd', name: '发布活动', component: activityAdd },
 				{ path: '/home/order', name: '预约管理', component: order },
 				{ path: '/home/hotline', name: '热线管理', component: hotline },
             ]

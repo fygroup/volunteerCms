@@ -69,6 +69,7 @@ import { uploadPath } from '@/path/path'
 import { getCookie, setCookie } from "@/util/cookie";
 import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
 import { addVolunteerTeam } from "api/volunteer/index";//新增志愿者团队
+import { queryVolunteerTeam } from "api/volunteer/index";//查看详情
 import { uploadFile } from "api/upload/index";
 export default {
     data(){
@@ -113,6 +114,9 @@ export default {
     },
     mounted() {
         this.queryTypeDetailByTypeCodePost();
+        if(this.$route.query.type==2){
+            this.queryVolunteerTeamPost();
+        }
     },
     methods: {
          // 上传图片成功
@@ -133,6 +137,14 @@ export default {
             queryTypeDetailByTypeCode({code: 'fwlx'}).then(data => {
                 if(data.data.status==200){
                     this.typeCodeList = data.data.data
+                }
+            })
+        },
+        //根据uuid查看详情
+        queryVolunteerTeamPost(){
+            queryVolunteerTeam({uuid: this.$route.query.uuid}).then(data => { 
+                if(data.data.status==200){
+                    console.log(data.data)
                 }
             })
         },

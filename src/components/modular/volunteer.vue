@@ -74,9 +74,9 @@ export default {
                                     }
                                 },
                                 {
-                                    label: "删除",
+                                    label: "设置负责人",
                                     func: {
-                                        func: "del",
+                                        func: "view",
                                         uuid: param.row.uuid
                                     }
                                 }
@@ -89,7 +89,7 @@ export default {
                             },
                             on: {
                                 update: this.update,
-                                del: this.del
+                                view: this.view
                             }
                         });
                     }
@@ -110,16 +110,6 @@ export default {
                 }
             })
         },
-        searchSubmit() {
-            this.queryVolunteerListPost(this.pageNum, this.formInline.real_name, this.formInline.typeId );            
-        },
-        onClickAdd() {
-            this.$router.push({path: '/home/volunteerAdd?type=1' })
-        },
-        //修改
-        update(obj){
-            this.$router.push({path: '/home/volunteerAdd?uuid='+obj+'' })
-        },
         //查询列表
         queryVolunteerListPost(pageNum, name, type) {
             let params = {
@@ -135,8 +125,21 @@ export default {
                 }
             })
         },
-        del(){
-
+        //搜索
+        searchSubmit() {
+            this.queryVolunteerListPost(this.pageNum, this.formInline.real_name, this.formInline.typeId );            
+        },
+        //新增
+        onClickAdd() {
+            this.$router.push({path: '/home/volunteerAdd?type=1' })
+        },
+        //修改
+        update(obj){
+            this.$router.push({path: '/home/volunteerAdd?uuid='+obj+'&type=2' })
+        },
+        //设置负责人
+        view(obj){
+            this.$router.push({path: '/home/volunteerUser?uuid='+obj+'' })
         }
     }
 }

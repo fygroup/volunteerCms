@@ -8,14 +8,13 @@ export function uploadFile(params) {
         let param = new FormData();
         if(params.length==undefined){
             param.append('file', params);
-            alert(1)
         }else {
             for(var i=0;i<params.length;i++){
                 param.append('file', params[i]);
             }
-            alert(2)
         }
         axiosToken.post(path + 'file/upload.do', param).then(data => {
+            debugger
             resolve(data)
         })
     })
