@@ -156,13 +156,14 @@ export default {
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-                    console.log(this.fileArr)
-                    uploadFile(this.fileArr).then(data => {
+                    // console.log(this.fileArr)
+                    // uploadFile(this.fileArr).then(data => {
                         
-                        if(data.data.status==200){
-                            debugger
-                        }
-                    })
+                    //     if(data.data.status==200){
+                    //         debugger
+                    //     }
+                    // })
+                    this.paramsList();
 				} else {
                     return false;
 				}

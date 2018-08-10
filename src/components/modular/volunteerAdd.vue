@@ -9,18 +9,16 @@
                     <el-form-item label="团队名称" prop="name" class="form-control">
                         <el-input v-model="ruleForm.name" placeholder="请输入团队名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="团队头像" prop="head_url" class="form-control">
+                    <el-form-item label="活动封面图">
                         <el-upload
+                            class="avatar-uploader"
                             :action="serverUrl"
-                            list-type="picture-card"
+                            :show-file-list="false"
                             :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload"
-                            >
-                            <i class="el-icon-plus"></i>
+                            :before-upload="beforeAvatarUpload">
+                            <img v-if="ruleForm.head_url" :src="ruleForm.head_url" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="ruleForm.head_url" alt="">
-                        </el-dialog>
                     </el-form-item>
                     <el-form-item label="所属类型" prop="type">
                         <el-select v-model="ruleForm.type" placeholder="请选择所属类型">
@@ -36,11 +34,11 @@
                     <el-form-item label="招募时间" prop="recruit_starttime" class="form-control">
                         <el-date-picker
                             v-model="ruleForm.recruit_starttime"
-                            type="datetimerange"
+                            type="daterange"
                             range-separator="至"
                             start-placeholder="招募开始时间"
                             end-placeholder="招募结束时间"
-                            value-format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd"
                             align="right">
                         </el-date-picker>
                     </el-form-item>
@@ -87,7 +85,7 @@ export default {
                 introduction: '',
                 pictureList: [],
                 join_type: '',
-                head_url: []
+                head_url: ''
             },
             rules: {
 				name: [
@@ -121,8 +119,7 @@ export default {
     methods: {
          // 上传图片成功
         handleAvatarSuccess(res, file) {
-            this.ruleForm.head_url.push(URL.createObjectURL(file.raw));
-            this.ruleForm.pictureList.push(file);
+            this.ruleForm.head_url = res.data
         },
         // 上传图片前
         beforeAvatarUpload(file) {
@@ -145,6 +142,13 @@ export default {
             queryVolunteerTeam({uuid: this.$route.query.uuid}).then(data => { 
                 if(data.data.status==200){
                     console.log(data.data)
+                    this.ruleForm.name = data.data.data.name
+                    this.ruleForm.type = ''+data.data.data.type+''
+                    this.ruleForm.service_type = data.data.data.service_type
+                    this.ruleForm.join_type = data.data.data.join_type
+                    this.ruleForm.recruit_starttime = [ data.data.data.recruit_starttime, data.data.data.recruit_endtime ]
+                    this.ruleForm.service_time = data.data.data.service_time
+                    this.ruleForm.introduction = data.data.data.introduction
                 }
             })
         },
