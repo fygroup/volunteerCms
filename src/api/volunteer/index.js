@@ -56,5 +56,14 @@ export function addVTeamUser(params) {
     })
 }
 
+/* 删除志愿者团队管理员 */
+export function deleteVTeamUser(params) {
+  return new Promise((resolve, reject) => {
+    axiosToken.post(path + 'vteamuser/deleteVTeamUser.do', params).then(data => {
+      resolve(data)
+    })
+  })
+}
+
 
 
