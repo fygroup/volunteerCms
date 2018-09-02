@@ -1,0 +1,1154 @@
+重要备注：除了 一、登录中的接口不需要在header中传user_id,其他接口都需要
+
+一、登陆
+1.小程序微信授权登陆
+url:/wxbacksys/xcxlogin/login.do
+参数：code，（获取openid使用的code）
+      nickName，（微信昵称）
+      gender，（微信性别 1:男 2女）
+      avatarUrl（微信头像）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "user_id": "153076074368740",（用户id）
+	"role": 1  角色（1：普通用户  2：志愿者团队管理员  3:社区管理员）
+    },
+    "total": 0,
+    "pages": 0
+}
+
+2.pc端登陆
+url：/wxbacksys/pclogin/login.do
+参数：userName,(用户名)
+      passWord(密码)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "user_id": "153023746011593", （用户id）
+	"role":3 角色（1：普通用户  2：志愿者团队管理员  3:社区管理员）
+    },
+    "total": 0,
+    "pages": 0
+}
+
+二、查询服务类型明细
+1.查询服务类型明细根据服务编码
+url:/wxbacksys/typedetail/queryTypeDetailByTypeCode.do
+入参：type （服务类型： 目前只有一个服务类型编码 fwlx 以后可以在扩展）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "name": "环境保护",               （类型明细名称）
+            "uuid": "153049720572388"          （类型明细id）
+        },
+        {
+            "name": "老人关爱",
+            "uuid": "153049724075277"
+        },
+        {
+            "name": "手工课堂",
+            "uuid": "153049725197393"
+        },
+        {
+            "name": "科创园地",
+            "uuid": "153049726659970"
+        },
+        {
+            "name": "亲子活动",
+            "uuid": "153049728164352"
+        },
+        {
+            "name": "家电维修",
+            "uuid": "153049730503275"
+        }
+    ],
+    "total": 0,
+    "pages": 0
+}
+
+
+三：志愿者团队
+1.新增志愿者团队
+url:/wxbacksys/volunteerTeam/addVolunteerTeam.do
+方式：post
+参数：{
+	"name": "test",   （志愿者团队名称）
+	"type": "",          （类型id）
+	"service_type": "",          （服务类型）
+	"recruit_starttime": "2018-06-29",  （招募开始时间）
+	"recruit_endtime": "2018-06-30",     （招募结束时间）
+	"service_time": "xxxx",               （服务时间）
+	"join_type": "",                        （加入方式）
+	"introduction": "kooafkosdf",           （简介）
+	"pictureList": [{  （志愿者团队图片）
+			"name": "aa.png",       （图片名称）
+			"url": "http://www.baidu.com" （图片地址）
+		},
+		{
+			"name": "bb.png",
+			"url": "http://www.hao123.com"
+		}
+	]
+}
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.查询志愿者团队列表
+url:/wxbacksys/volunteerTeam/queryVolunteerTeamList.do
+方式：post
+入参：	name  (志愿者团队名称) String,
+	type   （服务类型）Integer,
+	pageSize （每页显示多少条数据）int，
+	pageNum  （显示第几页）int
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "create_time": "2018-06-29 15:43:52",  （创建时间）
+            "name": "test",                         （志愿者团队名称）
+            "type": "",                               （类型id）
+	    "type_name": "",                               （类型名称）
+            "uuid": "153025823239053"                 （志愿者团队uuid）
+        }
+    ],
+    "total": 1,                                  (总条数)
+    "pages": 1                                    （总页数）
+}
+
+3.查询志愿者团队详情
+url:/wxbacksys/volunteerTeam/queryVolunteerTeam.do
+方式：post
+入参：uuid （志愿者团队id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "uuid": "153025823239053",  （志愿者团队uuid）
+        "name": "test",              (志愿者团队名称)
+	"type": "",                   （类型id）
+	 "type_name": "",                   （类型名称）
+        "service_type": "",                   （服务类型）
+        "recruit_starttime": "2018-06-29", （招募开始时间）
+        "recruit_endtime": "2018-06-30",    （招募结束时间）
+        "service_time": "xxxx",              （服务时间）
+        "join_type": 2,                     （加入方式）
+        "introduction": "kooafkosdf",        （简介）
+        "create_time": "2018-06-29 15:43:52",  （创建时间）
+        "update_time": "2018-06-29 15:43:52",   （修改时间）
+        "pictureList": [                         （图片集合）
+            {
+                "uuid": "153025823249384",         （图片uuid）
+                "volunteer_team_id": "",
+                "name": "aa.png",                 （图片名称）
+                "url": "http://www.baidu.com",      （图片链接）
+                "create_time": "",
+                "update_time": ""
+            },
+            {
+                "uuid": "153025823249601",
+                "volunteer_team_id": "",
+                "name": "bb.png",
+                "url": "http://www.hao123.com",
+                "create_time": "",
+                "update_time": ""
+            }
+        ]
+    },
+    "total": 0,
+    "pages": 0
+}
+
+4.修改志愿者团队
+url:/volunteerTeam/updateVolunteerTeam.do
+方式：post
+入参：{
+	"uuid":"志愿者团队id" (志愿者团队id)
+	"name": "test",   （志愿者团队名称）
+	"type": "",          （类型id）
+	"service_type": "",          （服务类型）
+	"recruit_starttime": "2018-06-29",  （招募开始时间）
+	"recruit_endtime": "2018-06-30",     （招募结束时间）
+	"service_time": "xxxx",               （服务时间）
+	"join_type": "",                        （加入方式）
+	"introduction": "kooafkosdf",           （简介）
+	"pictureList": [{  （志愿者团队图片）
+			"name": "aa.png",       （图片名称）
+			"url": "http://www.baidu.com" （图片地址）
+		},
+		{
+			"name": "bb.png",
+			"url": "http://www.hao123.com"
+		}
+	]
+}
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+5.根据类型查询志愿者团队详情
+url:/wxbacksys/volunteerTeam/queryVolunteerTeamByType.do
+方式：post
+入参：type （类型id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "uuid": "153025823239053",  （志愿者团队uuid）
+        "name": "test",              (志愿者团队名称)
+	"type": "",                   （类型id）
+	 "type_name": "",                   （类型名称）
+        "service_type": "",                   （服务类型）
+        "recruit_starttime": "2018-06-29", （招募开始时间）
+        "recruit_endtime": "2018-06-30",    （招募结束时间）
+        "service_time": "xxxx",              （服务时间）
+        "join_type": 2,                     （加入方式）
+        "introduction": "kooafkosdf",        （简介）
+        "create_time": "2018-06-29 15:43:52",  （创建时间）
+        "update_time": "2018-06-29 15:43:52",   （修改时间）
+        "pictureList": [                         （图片集合）
+            {
+                "uuid": "153025823249384",         （图片uuid）
+                "volunteer_team_id": "",
+                "name": "aa.png",                 （图片名称）
+                "url": "http://www.baidu.com",      （图片链接）
+                "create_time": "",
+                "update_time": ""
+            },
+            {
+                "uuid": "153025823249601",
+                "volunteer_team_id": "",
+                "name": "bb.png",
+                "url": "http://www.hao123.com",
+                "create_time": "",
+                "update_time": ""
+            }
+        ]
+    },
+    "total": 0,
+    "pages": 0
+}
+
+6.查询我的志愿者团队
+url:/wxbacksys/volunteerTeam/queryVolunteerTeamListForMy.do
+参数：pageSize(每页显示条数)
+      pageNum(显示第几页)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "type_name": "环境保护",                （服务类型名称）
+            "create_time": "2018-07-02 10:19:38",    （创建时间） 
+            "name": "环境保护志愿者团队",             （志愿者团队名称）
+            "stauts": 2,                              （状态（1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+            "type": "153049720572388",                 （服务类型id）
+            "uuid": "153049797815994"                   (志愿者团队id)
+        }
+    ],
+    "total": 1,      (总条数)
+    "pages": 1	     （总页数）
+}
+
+
+四、热线
+1.查询热线
+url:/wxbacksys/hotline/queryHotline.do
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "phone": "18508477708",  （热线号码）
+        "uuid": "1"               （热线id）
+    },
+    "total": 0,
+    "pages": 0
+}
+
+2.修改热线
+url:/wxbacksys/hotline/updateHotline.do
+参数：uuid，(热线id)
+      phone  (热线号码)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+五、实名认证
+1.进行实名认证
+url:/wxbacksys/authentication/addAuthentication.do
+参数：name, (姓名)
+      card_number（身份证号码）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+六、预约服务
+1.申请预约服务
+url:/wxbacksys/bookService/addBookingService.do
+参数：type，（服务类型）String
+      address,(地址) String
+      booking_time,（预约时间）String 2018-07-04 09:00:00
+      phone,(联系电话)
+      remark（备注）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.查询我的预约服务列表
+url:/wxbacksys/bookService/queryBookingServiceForMySelf.do
+参数：pageSize, (一页显示多少条) int
+      pageNum (显示第几页) int
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "type_name": "环境保护",                    （服务类型名称）
+            "update_time": "2018-07-04 17:39:29",        （修改时间）
+            "address": "test",                            （预约地点）
+            "create_time": "2018-07-04 17:39:29",         （创建时间）
+            "phone": "111111",                             （联系电话）
+            "user_id": "153023693735376",                   （用户id）
+            "user_name": "张三",                             (用户名称)
+            "booking_time": "2018-07-04 09:00:00",           （预约时间）
+            "remark": "备注",                                 （备注）
+            "type": "153049720572388",                        （服务类型id）
+            "uuid": "153069716975338",                         (预约id)
+            "status": 1                                         (状态 1：已读 2：未读)
+        }
+    ],
+    "total": 1,
+    "pages": 1
+}
+
+3.查询需要预约服务管理列表
+url:/wxbacksys/bookService/queryBookingServiceForTeam.do
+参数：pageSize, (一页显示多少条) int
+      pageNum (显示第几页) int
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "type_name": "环境保护",                    （服务类型名称）
+            "update_time": "2018-07-04 17:39:29",        （修改时间）
+            "address": "test",                            （预约地点）
+            "create_time": "2018-07-04 17:39:29",         （创建时间）
+            "phone": "111111",                             （联系电话）
+            "user_id": "153023693735376",                   （用户id）
+            "user_name": "张三",                             (用户名称)
+            "booking_time": "2018-07-04 09:00:00",           （预约时间）
+            "remark": "备注",                                 （备注）
+            "type": "153049720572388",                        （服务类型id）
+            "uuid": "153069716975338",                         (预约id)
+            "status": 1                                         (状态 1：已读 2：未读)
+        }
+    ],
+    "total": 1,
+    "pages": 1
+}
+
+4.查询预约详情
+url:/wxbacksys/bookService/queryBookingService.do
+参数：uuid(预约id) String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 
+        {
+            "type_name": "环境保护",                    （服务类型名称）
+            "update_time": "2018-07-04 17:39:29",        （修改时间）
+            "address": "test",                            （预约地点）
+            "create_time": "2018-07-04 17:39:29",         （创建时间）
+            "phone": "111111",                             （联系电话）
+            "user_id": "153023693735376",                   （用户id）
+            "user_name": "张三",                             (用户名称)
+            "booking_time": "2018-07-04 09:00:00",           （预约时间）
+            "remark": "备注",                                 （备注）
+            "type": "153049720572388",                        （服务类型id）
+            "uuid": "153069716975338",                         (预约id)
+            "status": 1                                         (状态 1：已读 2：未读)
+        },
+    "total": 0,
+    "pages": 0
+}
+
+5. 预约详情修改成已读
+url:/wxbacksys/bookService/updateBookingServiceRead.do
+参数：uuid(预约id) String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+七、志愿者
+1.申请成为志愿者
+url:/wxbacksys/volunteer/addVolunteer.do
+参数：name, （姓名）String
+      sex,  (性别（1：男 2 女）) int
+      birthday, (出生日期) String
+      educational_level,(教育程度(1:中专及以下  2：大专 3：本科 4：本科以上)) int
+      identity, (身份(1:学生 2：在职 3：待业 4其他))int
+      school_name, (学校名称) String
+      major_class, (专业/班级) String
+      industry, (所属行业) String
+      is_duty,  (是否参与义务服务（1：有  2 否）) int
+      service_time,  (服务时间(1:工作日 2：周末)) int
+      phone,        (电话号码) String
+      domicile,     （居住地）String 
+      volunteer_team_id  （志愿者团队id）String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.查询志愿者列表
+url；/wxbacksys/volunteer/queryVolunteerList.do
+参数：volunteer_team_id，(志愿者团队id) String
+      stautss,(状态（1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出）)  格式 2,4（以逗号分开可以传多种状态）String
+      pageSize,(每页显示多少条) int
+      pageNum (显示第几页) int
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "create_time": "2018-07-03 14:57:12",  （创建时间）
+            "user_id": "153023746011592",           （修改时间）
+            "name": "李四",                         （姓名）
+            "stauts": 1,                              (状态（1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出）)
+            "uuid": "153060103263939"                （志愿者id）
+        },
+        {
+            "create_time": "2018-07-03 14:49:34",
+            "user_id": "153023693735376",
+            "name": "张三",
+            "stauts": 1,
+            "uuid": "153060057429667"
+        }
+    ],
+    "total": 2,
+    "pages": 1
+}
+
+3.查询志愿者详情
+url:/wxbacksys/volunteer/queryVolunteer.do
+参数：uuid （志愿者id）String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "birthday": "1988-07-12",  （生日）
+        "service_time": 2,        （服务时间(1:工作日 2：周末)）   
+        "create_time": "2018-07-03 14:57:12",  （创建时间）
+        "major_class": "test",                  （专业/班级）
+        "sex": 1,                          （性别（1：男 2 女））
+        "school_name": "test",               （学校名称）
+        "industry": "test",                  （所属行业）
+        "uuid": "153060103263939",             （志愿者id）
+        "volunteer_team_id": "153049797815994",  (志愿者团队id)
+        "update_time": "2018-07-03 14:57:12",    (修改时间)
+        "user_id": "153023746011592",             （用户id）
+        "phone": "11111",                         (练习电话)
+        "educational_level": 3,                   （教育程度(1:中专及以下  2：大专 3：本科 4：本科以上)）
+        "identity": 2,                           （身份(1:学生 2：在职 3：待业 4其他)）
+        "name": "李四",                           （志愿者姓名）
+        "domicile": "1111",                        （居住地）
+        "stauts": 1,	(状态（1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出）)
+        "is_duty": 1    是否参与义务服务（1：有  2 否）
+    },
+    "total": 0,
+    "pages": 0
+}
+
+4.志愿者审批通过
+url:/wxbacksys/volunteer/updateVolunteerStatusForPass.do
+参数：uuid，（志愿者id）
+      team_name，（志愿者团队名称）
+      old_stauts  （当前志愿者的状态 （1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+5.志愿者申请审批拒绝
+url:/wxbacksys/volunteer/updateVolunteerStatusForRefuse.do
+参数：uuid，（志愿者id）
+      team_name，（志愿者团队名称）
+      old_stauts  （当前志愿者的状态 （1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+6.志愿者申请退出
+url:/wxbacksys/volunteer/updateVolunteerStatusForBack.do
+参数：uuid，（志愿者id）
+      team_name，（志愿者团队名称）
+      old_stauts  （当前志愿者的状态 （1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+7.志愿者申请退出审批通过
+url:/wxbacksys/volunteer/updateVolunteerStatusForBackPass.do
+参数：uuid，（志愿者id）
+      team_name，（志愿者团队名称）
+      old_stauts  （当前志愿者的状态 （1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+8.志愿者申请退出审批拒绝
+url:/wxbacksys/volunteer/updateVolunteerStatusForBackPass.do
+参数：uuid，（志愿者id）
+      team_name，（志愿者团队名称）
+      old_stauts  （当前志愿者的状态 （1：待审批  2：已加入  3：失败 4：退出待审核 5：已退出））
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+八、活动
+1、发布活动
+url:/wxbacksys/activity/addActivity.do
+方式：post
+入参：name，（活动名称）String
+      cover，（活动封面）String
+      activity_starttime，（活动开始时间） String 格式：yyyy-MM-dd HH:mm:ss 
+      activity_endtime，(活动结束时间)     String 格式：yyyy-MM-dd HH:mm:ss 
+      sign_starttime，  （活动报名时间） String 格式：yyyy-MM-dd
+      sign_endtime，     （活动结束时间） String 格式：yyyy-MM-dd
+      limit_people，      （限制人数）   int 
+      activity_place，     （活动地点） String
+      activity_detail，     （活动详情） String
+      volunteer_team_id     （所属志愿者团队） String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.查询志愿者团队活动列表
+url:/wxbacksys/activity/queryActivityListByVolunteerTeam.do
+方式：post
+入参：volunteer_team_id， （所属志愿者团队id） String
+      pageSize,(每页显示多少条)
+      pageNum(显示第几页)
+ 返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "activity_endtime": "2018-08-31 18:00:00", （活动结束时间）
+            "activity_place": "梅溪湖", （活动地点）
+            "name": "梅溪湖保护活动",    （活动名称）
+            "activity_starttime": "2018-07-30 09:30:00", （活动开始时间）
+            "uuid": "153049841232148"     （活动id）
+        },
+        {
+            "activity_endtime": "2018-08-31 18:00:00",
+            "activity_place": "西湖公园",
+            "name": "西湖保护活动",
+            "activity_starttime": "2018-07-30 09:30:00",
+            "uuid": "153049835481205"
+        }
+    ],
+    "total": 2,    (总条数)
+    "pages": 1	    （总页数）
+}
+
+3.查询活动详情
+url:/wxbacksys/activity/queryActivity.do
+入参：uuid（活动id）String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "limit_people": 30,                    （限制人数）
+        "create_time": "2018-07-02 10:25:54",    （创建时间）
+        "activity_endtime": "2018-08-31 18:00:00",   （活动结束时间）
+        "sign_endtime": "2018-07-31",                  （活动报名结束日期）
+        "uuid": "153049835481205",                     （活动id）
+        "sign_starttime": "2018-07-01",                 (活动报名开始日期)
+        "cover": "http://www.hao123.com",               （活动封面）
+        "volunteer_team_id": "153049797815994",          （所属志愿者团队id）
+        "update_time": "2018-07-02 10:25:54",              (修改时间)
+	 "total": 2,                                      （活动报名人数）
+	 "nameList": [                                     （报名人员列表）
+            { 
+                "name": "李四",                             （姓名）
+                "uuid": "153110183071658"                     （活动报名id）
+            }
+        ],
+        "activity_place": "西湖公园",                       （活动地点）
+        "name": "西湖保护活动",                              （活动名称）
+        "activity_detail": "adsfdsfsdf",                     （活动详情）
+        "activity_starttime": "2018-07-30 09:30:00"          （活动开始时间）
+    },
+    "total": 0,
+    "pages": 0
+}
+
+
+4.删除活动详情
+url:/wxbacksys/activity/deleteActivity.do
+方式：post
+入参： uuid （活动id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+5.修改活动
+url:/wxbacksys/activity/updateActivity.do
+方式：post
+入参：uuid,   (活动id)  String
+      name，（活动名称）String
+      cover，（活动封面）String
+      activity_starttime，（活动开始时间） String 格式：yyyy-MM-dd HH:mm:ss 
+      activity_endtime，(活动结束时间)     String 格式：yyyy-MM-dd HH:mm:ss 
+      sign_starttime，  （活动报名时间） String 格式：yyyy-MM-dd
+      sign_endtime，     （活动结束时间） String 格式：yyyy-MM-dd
+      limit_people，      （限制人数）   int 
+      activity_place，     （活动地点） String
+      activity_detail，     （活动详情） String
+      volunteer_team_id     （所属志愿者团队） String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+6.我参与的活动
+url:/wxbacksys/activity/queryActivityForMyself.do
+参数：pageSize,（每页显示多少条）
+      pageNum (显示第几页)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "activity_endtime": "2018-08-31 18:00:00",   （活动结束时间）
+            "activity_place": "西湖公园",                  （活动地点）
+            "name": "西湖保护活动",                        （活动名称）
+            "activity_starttime": "2018-07-30 09:30:00",    （活动开始时间）
+            "uuid": "153049835481205"                        （活动id）
+        }
+    ],
+    "total": 1,  (总条数)
+    "pages": 1 （总页数）
+}
+
+7.管理活动列表
+url:/wxbacksys/activity/queryActivityForManager.do
+参数：pageSize,（每页显示多少条）
+      pageNum (显示第几页)
+ 返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "volunteer_team_name": "环境保护志愿者团队",   （志愿者团队名称）
+            "activity_endtime": "2018-08-31 18:00:00",      （活动结束时间）
+            "activity_place": "西湖公园",                    （活动地点）
+            "name": "西湖保护活动",                         （活动名称）
+            "activity_starttime": "2018-07-30 09:30:00",     （活动开始时间）
+            "uuid": "153049835481205"                        （活动id）
+        }
+    ],
+    "total": 2,                                   (总条数)
+    "pages": 2              （总页数）
+}
+
+九、活动报名
+
+
+2.查看活动报名用户列表
+url:/wxbacksys/activityregistration/queryActivityRegistrationList.do
+参数：activity_id （活动id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "name": "李四",  （姓名）
+            "uuid": "153110183071658"  （活动报名id）
+        }
+    ],
+    "total": 0,
+    "pages": 0
+}
+
+3.查看活动报名详情
+url:/wxbacksys/activityregistration/queryActivityRegistration.do
+参数：uuid (活动报名id)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "address": "tttt",                       （住址）
+        "create_time": "2018-07-09 10:03:50",     （创建时间）
+        "user_id": "153023746011592",             （用户id）
+        "phone": "",                                (联系电话)
+        "activity_id": "153049835481205",           （活动id）
+        "name": "李四",                              (姓名)
+        "people_number": 2,                          （人数）
+        "uuid": "153110183071658",                    （活动报名id）
+        "age": 18                                      (年龄)
+    },
+    "total": 0,
+    "pages": 0
+}
+
+十、评价
+1.发布评价
+url:/wxbacksys/evaluate/addEvaluate.do
+方式：post
+入参：star_level，（评星（1：一颗星 2：两颗星 3：三颗星 4：四颗星 5：五颗星）） 
+	content， （评价内容）	
+	volunteer_team_id (志愿者团体id)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,    
+    "pages": 0
+}
+
+2.查询团队评价列表
+url:/wxbacksys/evaluate/queryEvaluateList.do
+方式：post
+入参：volunteer_team_id， (志愿者团队id)
+      pageSize,           (每页显示多少条)
+      pageNum             （显示第几页）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "volunteer_team_id": "153049797815994",  （志愿者团队id）
+            "star_level": 3,                          (几颗星)
+            "update_time": "2018-07-02 15:35:26",     （修改时间）
+            "create_time": "2018-07-02 15:35:26",      （创建时间）
+            "user_id": "153023693735376",               （用户id）
+            "user_name": "张三",                       (用户名称)
+            "uuid": "153051692690562",                 （用户uuid）
+            "content": "bbb"                            (评价内容)
+        },
+        {
+            "volunteer_team_id": "153049797815994",
+            "star_level": 2,
+            "update_time": "2018-07-02 15:35:21",
+            "create_time": "2018-07-02 15:35:21",
+            "user_id": "153023693735376",
+            "user_name": "张三",
+            "uuid": "153051692121497",
+            "content": "aaaa"
+        },
+        {
+            "volunteer_team_id": "153049797815994",
+            "star_level": 1,
+            "update_time": "2018-07-02 15:35:02",
+            "create_time": "2018-07-02 15:35:02",
+            "user_id": "153023693735376",
+            "user_name": "张三",
+            "uuid": "153051690275662",
+            "content": "teeee"
+        }
+    ],
+    "total": 3,
+    "pages": 1
+}
+
+3.查询志愿者团队评价分数
+url:/wxbacksys/evaluate/queryMarkForTeam.do
+方式：post
+入参：volunteer_team_id （志愿者团队id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 34,  （分数）
+    "total": 0,
+    "pages": 0
+}
+
+4.查询评价详情
+url:/wxbacksys/evaluate/queryEvaluate.do
+方式：post
+入参：uuid （评价id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "volunteer_team_id": "153049797815994",  （志愿者团队id）
+        "star_level": 1,                          (几颗星)
+        "update_time": "2018-07-02 15:35:02",     （更新时间）
+        "create_time": "2018-07-02 15:35:02",      （创建时间）
+        "user_id": "153023693735376",              （用户id）
+        "user_name": "张三",                        (用户名称)
+        "uuid": "153051690275662",                  （评价id）
+        "content": "teeee"                           (评价内容)
+    },
+    "total": 0,
+    "pages": 0
+}
+
+十一.消息
+1.查询我的信息
+url:/wxbacksys/message/queryMessageList.do
+参数：pageSize (每页显示多少条)
+      pageNum	(显示第几页)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "update_time": "2018-07-03 15:58:01",   (修改时间)
+            "flag": 1,                               状态（1：未读 2：已读）
+            "create_time": "2018-07-03 15:58:01",    （创建时间）
+            "user_id": "153023746011592",             （用户id）
+            "title": "志愿者退出申请",                (标题)
+            "uuid": "153060468179280",                 （消息id）
+            "content": "对不起，环境保护志愿者团队拒绝了您的申请！" (消息内容)
+        }
+    ],
+    "total": 4, （总条数）
+    "pages": 4  （总页数）
+}
+
+2.查询消息列表详情
+url:/wxbacksys/message/queryMessage.do
+参数：uuid （消息id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "update_time": "2018-07-03 15:58:01",   (修改时间)
+        "flag": 1,                              状态（1：未读 2：已读）
+        "create_time": "2018-07-03 15:58:01",   （创建时间）
+        "user_id": "153023746011592",            （用户id）
+        "title": "志愿者退出申请",                (标题)
+        "uuid": "153060468179280",                  （消息id）
+        "content": "对不起，环境保护志愿者团队拒绝了您的申请！"   (消息内容)
+    },
+    "total": 0,
+    "pages": 0
+}
+
+3.消息修改为已读
+url:/wxbacksys/message/updateMessageForRead.do
+参数:uuid (消息id)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+
+
+十二：用户
+1.新增用户
+url:/wxbacksys/user/addUser.do
+方式：post
+入参：nick_name（昵称）String，
+      real_name （真实姓名）String，
+      head_url（头像地址）String,
+      sex   (性别 1:男 2：女) Integer,
+      phone   （手机号码）String，
+      card_number （身份证号码）String，
+      birthday  （出生日期）String，
+      domicile    （居住地）String，
+      vocation   （职业）String，
+      industry    （所属行业）String，
+      openid  （小程序openId） 必填 String
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.查询用户列表
+url:/wxbacksys/user/queryUserList.do
+方式：post
+入参：nick_name（昵称）String，
+      real_name（真实姓名）String,
+      phone（手机号码）String,
+      sex   (性别 1:男 2：女) Integer,
+      card_number（身份证号码）String,
+      role (角色1：普通用户  2：志愿者团队管理员  3:社区管理员) Integer,
+      is_authentication (是否实名认证（1：是 2：否）),
+      pageSize (每页显示多少条) int 必填,
+      pageNum （显示第几页）int 必填
+ 返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "birthday": "2001-01-21",（生日）
+            "role": 1,               （角色1：普通用户  2：志愿者团队管理员  3:社区管理员）
+            "card_number": "",  （身份证）
+            "phone": "",         （电话号码）
+	    "sex":1,               (性别 1:男 2：女) 
+            "nick_name": "李四",   （昵称）
+            "real_name": "",         （真实姓名）
+            "uuid": "153023746011592"  （用户uuid）
+        },
+        {
+            "birthday": "2000-01-21",
+            "role": 1,
+            "card_number": "",
+            "phone": "",
+	     "sex":1,               (性别 1:男 2：女) 
+            "nick_name": "张三",
+            "real_name": "",
+            "uuid": "153023693735376"
+        }
+    ],
+    "total": 2,
+    "pages": 1
+}
+
+3.查询用户详情
+url:/wxbacksys/user/queryUser.do
+方式：post
+入参：uuid（用户uuid）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": {
+        "birthday": "2000-01-21", （生日）
+        "role": 1,                  （角色1：普通用户  2：志愿者团队管理员  3:社区管理员）
+        "card_number": "",         （身份证）
+        "create_time": "2018-06-29 09:48:57",  （创建时间）
+        "openid": "xxxx111",                     （小程序openid）
+        "real_name": "",                        (真实姓名)
+        "industry": "",                          （所属行业）
+	 "sex":1,               (性别 1:男 2：女) 
+        "uuid": "153023693735376",               （用户uuid）
+	 "is_authentication":2,                 是否实名认证（1：是 2：否）
+        "vocation": "",                          (职业)
+        "update_time": "2018-06-29 09:48:57",    (修改时间)
+        "head_url": "",                          （头像）
+        "phone": "",                              （手机号码）
+        "nick_name": "张三",                      （昵称）
+        "appid": "34343242",                       （小程序appid）
+        "domicile": ""                              (居住地)
+    },
+    "total": 0,
+    "pages": 0
+}
+
+4.修改用户详情
+url:/wxbacksys/user/updateUser.do
+入参：uuid （用户uuid）必填 String，
+      nick_name（昵称）String，
+      real_name （真实姓名）String，
+      head_url（头像地址）String,
+      sex   (性别 1:男 2：女) Integer,
+      phone   （手机号码）String，
+      "is_authentication":2,                 是否实名认证（1：是 2：否）
+      card_number （身份证号码）String，
+      birthday  （出生日期）String，
+      domicile    （居住地）String，
+      vocation   （职业）String，
+      industry    （所属行业）String，
+      role (角色1：普通用户  2：志愿者团队管理员  3:社区管理员) int
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+十三、志愿者团队管理员
+1、设置志愿者团队管理员
+url:/wxbacksys/vteamuser/addVTeamUser.do
+参数：volunteer_team_id（志愿者团队id）
+      user_id(用户id)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.删除志愿者团队管理员
+url:/wxbacksys/vteamuser/deleteVTeamUser.do
+参数：volunteer_team_id（志愿者团队id）
+      user_id(用户id)
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+3.查看志愿者团队管理员列表
+url：/wxbacksys/vteamuser/queryVTeamUserList
+参数：volunteer_team_id（志愿者团队id）
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": [
+        {
+            "volunteer_team_id": "153049797815994",
+            "update_time": "2018-07-04 15:09:35",
+            "flag": 1,
+            "create_time": "2018-07-04 15:04:42",
+            "user_id": "153023746011592",
+            "uuid": "153068788249979"
+        }
+    ],
+    "total": 0,
+    "pages": 0
+}
+
+十四、文件
+1.文件上传
+url:/wxbacksys/file/upload.do
+参数：uploadFiles （文件）MultipartFile[]
+返回：{
+    "status": 200,
+    "msg": "/opt/var/111111.png", (图片地址)
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+十五、excel
+1.居民用户导入
+url:/wxbacksys/excel/importExcel.do
+参数：file （文件）MultipartFile
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.居民用户导出
+方法：get
+url:/wxbacksys/excel/exportExcel.do
+参数：无
+返回：excel文件
+
+十六、居民
+1.新增居民
+url:/resident/addResident.do
+参数：name,card_number,phone,sex
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+2.修改居民
+url:/resident/upadteResident.do
+参数：name,card_number,phone,sex
+返回：{
+    "status": 200,
+    "msg": "",
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+3.查询居民详情
+url:/resident/queryResident.do
+参数：uuid
+返回：{
+    "status": 200,
+    "msg": {
+		"uuid":"",
+		"name":"",
+		"phone":"",
+		"card_number":"",
+		"sex":""
+		},
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
+
+4.查询居民列表
+url:/resident/queryResidentList.do
+参数：pageSize,pageNum,name,card_number,phone,sex
+返回：{
+    "status": 200,
+    "msg": [{
+		"uuid":"",
+		"name":"",
+		"phone":"",
+		"card_number":"",
+		"sex":""
+		}],
+    "data": 1,
+    "total": 0,
+    "pages": 0
+}
