@@ -15,8 +15,10 @@
                     </el-form-item>
                     <el-form-item prop="pass">
                         <el-input
+                            type="password"
                             placeholder="请输入密码"
                             prefix-icon="fa fa-key"
+                            @keyup.enter.native="submitForm('ruleForm2')"
                             v-model="ruleForm2.pass">
                         </el-input>
                     </el-form-item>
@@ -71,14 +73,19 @@ export default {
                     };
                     login(params).then(response => {
                         if(response.data.status==200){
-                            let expireDays = 1000 * 60 * 60;
-                            setCookie("user_id",response.data.data.user_id,expireDays);
-                            this.$router.push({ path: '/home/resident' });
-                        }else {
-                            this.$alert(response.data.msg, '温馨提示', {
-                                confirmButtonText: '确定',
-                                callback: action => {}
+                            const loading = this.$loading({
+                                lock: true,
+                                text: '正在登陆系统中，请等候。',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
                             });
+                            setTimeout(() => {
+                                loading.close();
+                                let expireDays = 1000 * 60 * 60;
+                                sessionStorage.setItem("user_id", response.data.data.user_id);
+                                this.$router.push({ path: '/home/user' });
+                            }, 1000);
+                            
                         }
                     })
                 } else {

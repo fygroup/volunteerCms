@@ -14,7 +14,6 @@
                 text-color="#fff"
                 active-text-color="#fff">
                     <el-menu-item v-for="(item,index) in sidebarMenu" :key="index" :index="item.path">
-                        <i :class="item.icon"></i>
                         <span slot="title">{{item.name}}</span>
                     </el-menu-item>
                 </el-menu>
@@ -32,7 +31,8 @@ export default {
             defaultActive: this.$route.path,
             openeds: ['1'],
             sidebarMenu: [
-                { name: '居民管理', icon: 'el-icon-location', path: '/home/resident' },
+                { name: '居民管理', icon: 'el-icon-location', path: '/home/user' },
+                { name: '用户管理', icon: 'el-icon-location', path: '/home/resident' },
                 { name: '志愿者管理', icon: 'el-icon-location', path: '/home/volunteer' },
                 { name: '活动管理', icon: 'el-icon-location', path: '/home/activity' },
                 { name: '预约管理', icon: 'el-icon-location', path: '/home/order' },

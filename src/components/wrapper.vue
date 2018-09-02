@@ -6,7 +6,7 @@
 		<div class="sidebar">
 			<div class="sidebar-scroll">
 				<div class="logo">
-					<span>两型绿色账户后台</span>
+					<span>滨湖志愿队管理系统</span>
 				</div>
 				<div class="sidebar-nav-tree">
 					<sidebarMenu></sidebarMenu>
@@ -105,7 +105,7 @@ export default {
 		position: absolute;
 		left: 220px;
 		right: 0;
-		top: 50px;
+		top: 51px;
 		bottom: 50px;
 		z-index: 98;
 		width: auto;

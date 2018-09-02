@@ -28,7 +28,7 @@
 import table from '@/components/common/table'
 import MyDropDown from '@/components/common/MyDropDown'
 import { getCookie, setCookie } from "@/util/cookie";
-import { queryActivityForManager } from "src/api/activity/index";
+import { queryActivityForManager } from "api/activity/index";
 import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
 export default {
     components: {
@@ -111,7 +111,7 @@ export default {
             })
         },
         searchSubmit() {
-            this.queryVolunteerListPost(this.pageNum, this.formInline.real_name, this.formInline.typeId );            
+            this.queryActivityForManagerPost(this.pageNum, this.formInline.real_name, this.formInline.typeId );            
         },
         onClickAdd() {
             this.$router.push({path: '/home/activityAdd?type=1' })
@@ -126,8 +126,6 @@ export default {
                 pageSize: this.pageSize,
                 pageNum: pageNum,
                 name: name,
-                type: type,
-                user_id: getCookie('user_id')
             };
             queryActivityForManager(params).then(data => {
                 if(data.data.status==200){

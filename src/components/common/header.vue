@@ -1,16 +1,15 @@
 <template>
     <div class="__header">
         <div class="left">
-            <i class="el-icon-d-arrow-left"></i>
         </div>
         <ul class="right">
             <li>
                 <a href="javascript:void(0);">
-                    admin<i class="el-icon-arrow-down el-icon--right"></i>
+                    admin
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0);">
+                <a href="javascript:void(0);" @click="out()">
                     退出
                 </a>
             </li>
@@ -20,7 +19,28 @@
 
 <script>
 export default {
-
+    methods: {
+        out(){
+            this.$confirm('是否退出该系统?', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '正在退出系统中，请等候。',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    this.$router.push({ path: '/login' });
+                }, 500);
+            }).catch(() => {
+                
+            });
+        }
+    }
 }
 </script>
 

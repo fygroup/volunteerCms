@@ -47,6 +47,17 @@ export function queryTypeDetailByTypeCode(params) {
 
 
 
+/*查询志愿者团队成员*/
+export function queryVTeamUserList(params) {
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'vteamuser/queryVTeamUserList', params).then(data => {
+            resolve(data)
+        })
+    })
+}
+
+
+
 /*设置志愿者团队管理员*/
 export function addVTeamUser(params) {
     return new Promise((resolve, reject) => {
@@ -58,12 +69,9 @@ export function addVTeamUser(params) {
 
 /* 删除志愿者团队管理员 */
 export function deleteVTeamUser(params) {
-  return new Promise((resolve, reject) => {
-    axiosToken.post(path + 'vteamuser/deleteVTeamUser.do', params).then(data => {
-      resolve(data)
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'vteamuser/deleteVTeamUser.do', params).then(data => {
+            resolve(data)
+        })
     })
-  })
 }
-
-
-

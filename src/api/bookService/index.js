@@ -4,9 +4,9 @@ import axiosTokenJson from '@/util/axiosTokenJson'
 
 
 /*查看活动管理列表*/
-export function queryActivityForManager(params) {
+export function queryBookingServiceForMySelf(params) {
     return new Promise((resolve, reject) => {
-        axiosToken.post(path + 'activity/queryActivityForManager.do', params).then(data => {
+        axiosToken.post(path + 'bookService/queryBookingServiceForTeam.do', params).then(data => {
             resolve(data)
         })
     })
@@ -14,9 +14,9 @@ export function queryActivityForManager(params) {
 
 
 /*新增活动*/
-export function addActivity(params) {
+export function updateBookingServiceRead(params) {
     return new Promise((resolve, reject) => {
-        axiosToken.post(path + 'activity/addActivity.do', params).then(data => {
+        axiosToken.post(path + 'bookService/updateBookingServiceRead.do', params).then(data => {
             resolve(data)
         })
     })

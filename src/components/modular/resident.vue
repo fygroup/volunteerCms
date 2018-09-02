@@ -5,9 +5,6 @@
                 <el-form-item label="姓名：">
                     <el-input v-model="formInline.real_name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码：">
-                    <el-input v-model="formInline.phone" placeholder="请输入手机号码"></el-input>
-                </el-form-item>
                 <el-form-item label="性别：">
                     <el-select v-model="formInline.sex" placeholder="请选择性别">
                         <el-option label="男" value="1"></el-option>
@@ -25,9 +22,6 @@
                     <el-button type="primary" icon="el-icon-search" @click="searchSubmit('formInline')">查询</el-button>
                 </el-form-item>
             </el-form>
-        </div>
-        <div class="btnBox">
-            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="onClickAdd">新增</el-button>
         </div>
         <div class="tableList">
             <vtable :dataArray="dataArray" :columns="columns" :total="total" :isSelection="isSelection" @getArticle="queryUserListPost"></vtable>
@@ -141,34 +135,27 @@ export default {
                     prop: "",
                     label: "操作",
                     render: (h, param) => {
-                        const dropDownData = {
-                            label: "操作",
-                            items: [{
-                                    label: "修改",
-                                    func: {
-                                        func: "update",
-                                        uuid: param.row.uuid
-                                    }
+                        if(param.row.uuid!='153023746011593'){
+                            const dropDownData = {
+                                label: "操作",
+                                items: [{
+                                        label: "修改",
+                                        func: {
+                                            func: "update",
+                                            uuid: param.row.uuid
+                                        }
+                                    },
+                                ]
+                            };
+                            return h(MyDropDown, {
+                                props: {
+                                    dropDownData: dropDownData
                                 },
-                                {
-                                    label: "删除",
-                                    func: {
-                                        func: "del",
-                                        uuid: param.row.uuid
-                                    }
+                                on: {
+                                    update: this.update,
                                 }
-                            ]
-                        };
-                        // 触发MyDropDown的update和del事件
-                        return h(MyDropDown, {
-                            props: {
-                                dropDownData: dropDownData
-                            },
-                            on: {
-                                update: this.update,
-                                del: this.del
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             ],
@@ -180,9 +167,6 @@ export default {
     methods: {
         searchSubmit(formName) {
             this.queryUserListPost(this.pageNum, this.formInline.real_name, this.formInline.phone, this.formInline.sex, this.formInline.role,);
-            // this.$nextTick(function() {
-            //     this.$refs["formReset"].resetFields();
-            // })
         },
         onClickAdd() {
             this.$router.push({path: '/home/residentAdd?type=1' })
@@ -208,9 +192,6 @@ export default {
                 }
             })
         },
-        del(){
-
-        }
     }
 }
 </script>

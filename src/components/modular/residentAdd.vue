@@ -12,18 +12,18 @@
                     <el-form-item label="昵称" prop="nick_name" class="form-control">
                         <el-input v-model="ruleForm.nick_name" placeholder="请输入昵称"></el-input>
                     </el-form-item>
-                    <el-form-item label="用户头像" prop="head_url" class="form-control">
+                    <el-form-item label="用户头像">
                         <el-upload
                             class="avatar-uploader"
                             :action="serverUrl"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload"
-                            >
-                            <img v-if="ruleForm.head_url" :src="ruleForm.head_url" class="avatar">
+                            :before-upload="beforeAvatarUpload">
+                            <img v-if="ruleForm.coverpic" :src="ruleForm.coverpic" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
+
                     <el-form-item label="性别" prop="sex">
                         <el-select v-model="ruleForm.sex" placeholder="请选择性别">
                             <el-option label="男" value="1"></el-option>
@@ -80,6 +80,7 @@ export default {
             serverUrl: uploadPath,
             fileArr: [],
             ruleForm: {
+                coverpic: '',
                 real_name: '',
                 nick_name: '',
                 head_url: '',
@@ -93,21 +94,21 @@ export default {
                 role: ''
 			},
 			rules: {
-				real_name: [
-					{ required: true, message: "请输入姓名", trigger: "blur" },
-					{ min: 2, max: 6, message: "长度在 2 到 6 个字符", trigger: "blur" }
-                ],
-                phone: [
-                    { required: true, message: "请输入手机号码", trigger: "blur" },
-                    { min: 11, max: 11, message: "请输入正确的手机号码", trigger: "blur" }
-                ],
-				card_number: [
-                    { required: true, message: "请输入身份证号码", trigger: "blur" },
-                    { min: 18, max: 18, message: "请输入正确的身份证号码", trigger: "blur" }
-                ],
-                role: [
-                    { required: true, message: "请选择用户角色", trigger: "blur" },
-                ]
+				// real_name: [
+				// 	{ required: true, message: "请输入姓名", trigger: "blur" },
+				// 	{ min: 2, max: 6, message: "长度在 2 到 6 个字符", trigger: "blur" }
+                // ],
+                // phone: [
+                //     { required: true, message: "请输入手机号码", trigger: "blur" },
+                //     { min: 11, max: 11, message: "请输入正确的手机号码", trigger: "blur" }
+                // ],
+				// card_number: [
+                //     { required: true, message: "请输入身份证号码", trigger: "blur" },
+                //     { min: 18, max: 18, message: "请输入正确的身份证号码", trigger: "blur" }
+                // ],
+                // role: [
+                //     { required: true, message: "请选择用户角色", trigger: "blur" },
+                // ]
 			}
         }
     },
@@ -115,10 +116,10 @@ export default {
         this.queryUserPost(this.$route.query.uuid);//查询用户详情
     },
     methods: {
-        // 上传图片成功
+        //封面
         handleAvatarSuccess(res, file) {
-            this.ruleForm.head_url = URL.createObjectURL(file.raw);
-            this.fileArr = file
+            this.ruleForm.coverpic = URL.createObjectURL(file.raw);
+            this.fileArr = file.raw
         },
         // 上传图片前
         beforeAvatarUpload(file) {
@@ -133,8 +134,10 @@ export default {
                 if(data.data.status==200){
                     this.ruleForm.real_name = data.data.data.real_name
                     this.ruleForm.nick_name = data.data.data.nick_name
-                    this.ruleForm.head_url = data.data.data.head_url
-                    this.ruleForm.sex = ''+data.data.data.sex+''
+                    this.ruleForm.coverpic = data.data.data.head_url
+                    if(data.data.data.sex!=''){
+                        this.ruleForm.sex = ''+data.data.data.sex+''
+                    }
                     this.ruleForm.phone = data.data.data.phone
                     this.ruleForm.card_number = data.data.data.card_number
                     this.ruleForm.birthday = data.data.data.birthday
@@ -148,21 +151,15 @@ export default {
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-                    console.log(this.fileArr)
-                    uploadFile(this.fileArr).then(data => {
-                        if(data.data.status==200){
-                            debugger
-                        }
-                    })
-                    // if(this.fileArr && this.fileArr.length==0){
-                    //     this.paramsList(this.ruleForm.head_url)
-                    // }else {
-                    //     uploadFile(this.fileArr).then(data => {
-                    //         if(data.data.status==200){
-                    //             this.paramsList(data.data.msg)
-                    //         }
-                    //     })
-                    // }
+                    if(this.fileArr!=''){
+                        uploadFile(this.fileArr).then(data => {
+                            if(data.data.status==200){
+                                this.paramsList(data.data.data);
+                            }
+                        })
+                    } else {
+                        this.paramsList(this.ruleForm.coverpic);
+                    }
 				} else {
                     return false;
 				}
@@ -184,9 +181,15 @@ export default {
                 role: this.ruleForm.role
             };
             updateUser(params).then(data => {
+                var _this = this;
                 if(data.data.status==200){
-                    this.$alert("提交成功！", '温馨提示',
-                        { confirmButtonText: '确定', callback: action => { }
+                    this.$message({
+                        message: '修改成功！',
+                        type: 'success',
+                        duration: '500',
+                        onClose: function () {
+                            _this.$router.push({path: '/home/resident'})
+                        }
                     });
                 }
             })

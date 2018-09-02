@@ -5,7 +5,7 @@ import Qs from 'qs'
 let options = {
     headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'user_id': getCookie('user_id'),
+        'user_id': sessionStorage.getItem("user_id"),
     },
 }
 
