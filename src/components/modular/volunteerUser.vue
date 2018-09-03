@@ -17,9 +17,9 @@
 			<el-dialog title="新增" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :close-on-click-modal="false">
 				<div class="modelFromListBox">
 					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-						<el-form-item label="角色" prop="roleId" class="form-control">
-							<el-select v-model="ruleForm.roleId" placeholder="请选择角色">
-								<el-option v-for="(item,index) in roleQueryData" :key="index" :label="item.name" :value="item.uuid"></el-option>
+						<el-form-item label="姓名" prop="roleId" class="form-control">
+							<el-select v-model="ruleForm.roleId" placeholder="请选择姓名">
+								<el-option v-for="(item,index) in userList" :key="index" :label="item.nick_name" :value="item.uuid"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-form>
@@ -37,9 +37,7 @@
 <script>
 import { uploadPath } from "@/path/path";
 import { getCookie, setCookie } from "@/util/cookie";
-import { queryTypeDetailByTypeCode, addVTeamUser, deleteVTeamUser, queryVTeamUserList } from "api/volunteer/index"; //查询服务类型明细
-import { queryVolunteerTeam } from "api/volunteer/index"; //查看详情
-import { uploadFile } from "api/upload/index";
+import { addVTeamUser, deleteVTeamUser, queryVTeamUserList } from "api/volunteer/index"; //查询服务类型明细
 import table from '@/components/common/table'
 import MyDropDown from '@/components/common/MyDropDown'
 import { queryUserList } from "api/resident/index";
@@ -51,22 +49,17 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,//弹窗
+			userList: [],//查询用户
 			ruleForm: {
 				roleId: ''
 			},
-			typeCodeList: [],//查询服务类型明细
-			dynamicValidateForm: {
-				domains: [{
-					value: ''
-				}],
-				email: ''
+			rules: {
+				roleId: [
+					{ required: true, message: "请选择姓名", trigger: "change" },
+				],
 			},
-			formInline: {
-				real_name: '',
-				phone: '',
-				sex: '',
-				role: ''
-			},
+			
+
 			dataArray: [],
 			pageSize: 10,
 			pageNum: 1,
@@ -78,79 +71,8 @@ export default {
 					label: "用户昵称",
 				},
 				{
-					prop: "real_name",
-					label: "姓名",
-				},
-				{
-					prop: "sex",
-					label: "性别",
-					render: function(createElement) {
-						if (this.row.sex == 1) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '男',
-								}
-							})
-						} else if (this.row.sex == 2) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '女',
-								}
-							})
-						}
-					},
-				},
-				{
 					prop: "phone",
 					label: "手机号码",
-				},
-				{
-					prop: "card_number",
-					label: "身份证号码",
-				},
-				{
-					prop: "is_authentication",
-					label: "是否实名",
-					render: function(createElement) {
-						if (this.row.is_authentication == 1) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '是',
-								}
-							})
-						} else if (this.row.is_authentication == 2) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '否',
-								}
-							})
-						}
-					}
-				},
-				{
-					prop: "role",
-					label: "角色",
-					render: function(createElement) {
-						if (this.row.role == 1) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '普通用户',
-								}
-							})
-						} else if (this.row.role == 2) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '志愿者团队管理员',
-								}
-							})
-						} else if (this.row.role == 3) {
-							return createElement('span', {
-								domProps: {
-									innerHTML: '社区管理员',
-								}
-							})
-						}
-					}
 				},
 				{
 					prop: "",
@@ -159,33 +81,20 @@ export default {
 						let dropDownData = {
 							label: "操作",
 							items: [{
-								label: "设置为负责人",
+								label: "删除",
 								func: {
-									func: "update",
+									func: "del",
 									uuid: param.row.uuid
 								}
 							},
 							]
 						};
-
-						if (param.row.role == 2) {
-							//管理员
-							dropDownData.items.push({
-								label: '删除',
-								func: {
-									func: 'del',
-									uuid: param.row.uuid
-								}
-							})
-						}
-
 						// 触发MyDropDown的update和del事件
 						return h(MyDropDown, {
 							props: {
 								dropDownData: dropDownData
 							},
 							on: {
-								update: this.update,
 								del: this.del
 							}
 						});
@@ -195,71 +104,79 @@ export default {
 		};
 	},
 	mounted() {
-		this.queryTypeDetailByTypeCodePost();
-		this.queryUserListPost(this.pageNum);
+		this.queryUserListPost1();
+		this.queryUserListPost();
 	},
 	methods: {
+		//打开弹窗
 		onClickAdd(){
 			this.dialogFormVisible = true
 		},
-
-
-		searchSubmit(formName) {
-			this.queryUserListPost(this.pageNum, this.formInline.real_name, this.formInline.phone, this.formInline.sex, this.formInline.role, );
-			// this.$nextTick(function() {
-			//     this.$refs["formReset"].resetFields();
-			// })
-		},
-		//查询列表
-		queryUserListPost(pageNum, real_name, phone, sex, role) {
+		//查询用户信息
+		queryUserListPost1() {
 			let params = {
-				pageSize: this.pageSize,
-				pageNum: pageNum,
-				volunteer_team_id: this.$route.query.uuid
+				pageSize: 100,
+				pageNum: 1,
 			};
-			queryVTeamUserList(params).then(data => {
+			queryUserList(params).then(data => {
 				if (data.data.status == 200) {
-					this.total = data.data.total
-					this.dataArray = data.data.data
+					this.userList = data.data.data
 				}
 			})
 		},
-		/* 设置为负责人 */
-		update(uuid) {
-			this.$confirm('是否设置为负责人？？', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				let team_id = this.$route.query.uuid;
-				addVTeamUser({
-					volunteer_team_id: team_id,
-					user_id: uuid
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '设置成功!'
-					});
-					setTimeout(() => {
-						location.reload();
-					}, 500)
-				})
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消设置'
-				});
+		//取消弹窗
+		resetForm(ruleForm) {
+            this.$refs[ruleForm].resetFields();
+			this.dialogFormVisible = false
+		},
+		//提交
+		submitForm(ruleForm) {
+			this.$refs[ruleForm].validate(valid => {
+				if (valid) {
+                    var params = {
+						volunteer_team_id: this.$route.query.uuid,
+						user_id: this.ruleForm.roleId,
+					}
+					addVTeamUser(params).then(data => {
+						if(data.data.status==200){
+							this.$message({
+								message: '新增成功！',
+								type: 'success',
+								duration: '500',
+								onClose: function(){
+									window.location.reload();
+								}
+							});
+						}
+					})
+				} else {
+				    return false;
+				}
 			});
 		},
+		
+		queryUserListPost(pageNum){
+			let params = {
+                pageSize: this.pageSize,
+				pageNum: pageNum,
+				volunteer_team_id: this.$route.query.uuid,
+            };
+            queryVTeamUserList(params).then(data => {
+                if(data.data.status==200){
+                    this.total = data.data.total
+					this.dataArray = data.data.data
+                }
+            })
+		},
+
 		del(uuid) {
 			this.$confirm('取消管理员', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				let team_id = this.$route.query.uuid;
 				deleteVTeamUser({
-					volunteer_team_id: team_id,
+					volunteer_team_id: this.$route.query.uuid,
 					user_id: uuid
 				}).then(res => {
 					this.$message({
@@ -272,43 +189,8 @@ export default {
 				})
 			})
 		},
-		submitForm(formName) {
-			this.$refs[formName].validate((valid) => {
-				if (valid) {
-					let params = {
-						name: this.ruleForm.name,
-						activity_starttime: this.ruleForm.activity_starttime[0],
-					};
-					addVTeamUser(params).then(data => {
-						if (data.data.status == 200) {
-							this.$alert("提交成功！", '温馨提示',
-								{
-									confirmButtonText: '确定', callback: action => {
-									}
-								});
-						}
-					})
-				} else {
-					console.log('error submit!!');
-					return false;
-				}
-			});
-		},
-		resetForm(formName) {
-			this.$refs[formName].resetFields();
-		},
-		removeDomain(item) {
-			var index = this.dynamicValidateForm.domains.indexOf(item)
-			if (index !== -1) {
-				this.dynamicValidateForm.domains.splice(index, 1)
-			}
-		},
-		addDomain() {
-			this.dynamicValidateForm.domains.push({
-				value: '',
-				key: Date.now()
-			});
-		}
+		
+
 	}
 }
 </script>

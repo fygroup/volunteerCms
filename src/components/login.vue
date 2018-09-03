@@ -79,10 +79,9 @@ export default {
                                 spinner: 'el-icon-loading',
                                 background: 'rgba(0, 0, 0, 0.7)'
                             });
+                            sessionStorage.setItem("user_id", response.data.data.user_id);
                             setTimeout(() => {
                                 loading.close();
-                                let expireDays = 1000 * 60 * 60;
-                                sessionStorage.setItem("user_id", response.data.data.user_id);
                                 this.$router.push({ path: '/home/user' });
                             }, 1000);
                             

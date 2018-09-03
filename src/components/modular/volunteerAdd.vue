@@ -68,6 +68,7 @@ import { getCookie, setCookie } from "@/util/cookie";
 import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
 import { addVolunteerTeam } from "api/volunteer/index";//新增志愿者团队
 import { queryVolunteerTeam } from "api/volunteer/index";//查看详情
+import { updateVolunteerTeam } from "api/volunteer/index";//查看详情
 import { uploadFile } from "api/upload/index";
 export default {
     data(){
@@ -75,6 +76,7 @@ export default {
             typeCodeList: [],//查询服务类型明细
             dialogVisible: false,
             serverUrl: uploadPath,
+            fileArr: [],
             ruleForm: {
                 name: '',
                 type: '',
@@ -119,7 +121,8 @@ export default {
     methods: {
          // 上传图片成功
         handleAvatarSuccess(res, file) {
-            this.ruleForm.head_url = res.data
+            this.ruleForm.head_url = URL.createObjectURL(file.raw);
+			this.fileArr.push(file.raw)
         },
         // 上传图片前
         beforeAvatarUpload(file) {
@@ -149,38 +152,81 @@ export default {
                     this.ruleForm.recruit_starttime = [ data.data.data.recruit_starttime, data.data.data.recruit_endtime ]
                     this.ruleForm.service_time = data.data.data.service_time
                     this.ruleForm.introduction = data.data.data.introduction
+                    this.ruleForm.head_url = data.data.data.pictureList[0].url
                 }
             })
         },
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-                    this.paramsList()
+                    if(this.fileArr!=''){
+                        uploadFile(this.fileArr).then(data => {
+                            if(data.data.status==200){
+                                this.paramsList(data.data.data);
+                            }
+                        })
+                    } else {
+                        this.paramsList(this.ruleForm.head_url);
+                    }
 				} else {
                     return false;
 				}
 			});
         },
         paramsList(head_url){
-            let params = {
-                name: this.ruleForm.name,
-                type: this.ruleForm.type,
-                service_type: this.ruleForm.service_type,
-                join_type: this.ruleForm.join_type,
-                recruit_starttime: this.ruleForm.recruit_starttime[0],
-                recruit_endtime: this.ruleForm.recruit_starttime[1],
-                service_time: this.ruleForm.service_time,
-                introduction: this.ruleForm.introduction,
-                pictureList: [],
-            };
-            console.log(JSON.stringify(params))
-            addVolunteerTeam(params).then(data => { 
-                if(data.data.status==200){
-                    this.$alert("提交成功！", '温馨提示',
-                        { confirmButtonText: '确定', callback: action => { }
-                    });
-                }
-            })
+            if(this.$route.query.type==1){
+                let params = {
+                    name: this.ruleForm.name,
+                    type: this.ruleForm.type,
+                    service_type: this.ruleForm.service_type,
+                    join_type: this.ruleForm.join_type,
+                    recruit_starttime: this.ruleForm.recruit_starttime[0],
+                    recruit_endtime: this.ruleForm.recruit_starttime[1],
+                    service_time: this.ruleForm.service_time,
+                    introduction: this.ruleForm.introduction,
+                    pictureList: [{url: head_url}],
+                };
+                addVolunteerTeam(params).then(data => {
+                    var _this = this;
+                    if(data.data.status==200){
+                        this.$message({
+                            message: '新增成功！',
+                            type: 'success',
+                            duration: '500',
+                            onClose: function() {
+                                _this.$router.push({ path: '/home/volunteer' })
+                            }
+                        });
+                    }
+                })
+            }else {
+                let params = {
+                    uuid: this.$route.query.uuid,
+                    name: this.ruleForm.name,
+                    type: this.ruleForm.type,
+                    service_type: this.ruleForm.service_type,
+                    join_type: this.ruleForm.join_type,
+                    recruit_starttime: this.ruleForm.recruit_starttime[0],
+                    recruit_endtime: this.ruleForm.recruit_starttime[1],
+                    service_time: this.ruleForm.service_time,
+                    introduction: this.ruleForm.introduction,
+                    pictureList: [{url: head_url}],
+                };
+                updateVolunteerTeam(params).then(data => {
+                    var _this = this;
+                    if(data.data.status==200){
+                        this.$message({
+                            message: '修改成功！',
+                            type: 'success',
+                            duration: '500',
+                            onClose: function() {
+                                _this.$router.push({ path: '/home/volunteer' })
+                            }
+                        });
+                    }
+                })
+            }
+            
         },
 	}
 }

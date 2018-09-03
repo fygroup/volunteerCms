@@ -35,6 +35,15 @@ export function addVolunteerTeam(params) {
 }
 
 
+/*修改志愿者团队*/
+export function updateVolunteerTeam(params) {
+    return new Promise((resolve, reject) => {
+        axiosTokenJson.post(path + 'volunteerTeam/updateVolunteerTeam.do', params).then(data => {
+            resolve(data)
+        })
+    })
+}
+
 
 /*查询服务类型明细*/
 export function queryTypeDetailByTypeCode(params) {

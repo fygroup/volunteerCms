@@ -33,7 +33,7 @@ export default {
             sidebarMenu: [
                 { name: '居民管理', icon: 'el-icon-location', path: '/home/user' },
                 { name: '用户管理', icon: 'el-icon-location', path: '/home/resident' },
-                { name: '志愿者管理', icon: 'el-icon-location', path: '/home/volunteer' },
+                { name: '志愿队管理', icon: 'el-icon-location', path: '/home/volunteer' },
                 { name: '活动管理', icon: 'el-icon-location', path: '/home/activity' },
                 { name: '预约管理', icon: 'el-icon-location', path: '/home/order' },
                 { name: '热线管理', icon: 'el-icon-location', path: '/home/hotline' },

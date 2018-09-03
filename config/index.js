@@ -13,9 +13,9 @@ module.exports = {
         proxyTable: {
             '/wxbacksys/': {
                 //target: 'http://localhost:8080/',
-                target: 'http://192.168.199.231:8080/', //小民本地
+                //target: 'http://192.168.199.231:8080/', //小民本地
                 //target: 'http://47.106.163.198:8081/', //100服务器
-                //target: 'http://120.77.223.58:8080/', //生产服务
+                target: 'http://120.77.223.58:8080/', //生产服务
                 changeOrigin: true
             },
         },

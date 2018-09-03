@@ -13,7 +13,7 @@ export default {
 		axiosToken.interceptors.request.use(
 			config => {
 				if (sessionStorage.getItem("user_id")) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-					config.headers.access_token = `${sessionStorage.getItem("user_id")}`;
+					config.headers.user_id = `${sessionStorage.getItem("user_id")}`;
 				}
 				return config;
 			},
