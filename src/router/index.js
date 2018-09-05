@@ -16,9 +16,14 @@ import activityAdd from '@/components/modular/activityAdd'; //活动管理
 import order from '@/components/modular/order'; //预约管理
 import hotline from '@/components/modular/hotline'; //热线管理
 
-export default new Router({
+const router = new Router({
     routes: [{
             path: '/login',
+            name: '登录',
+            component: login,
+        },
+        {
+            path: '/',
             name: '登录',
             component: login,
         },
@@ -43,3 +48,13 @@ export default new Router({
         }
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.name) {
+        document.title = to.name
+    }
+    window.scrollTo(0, 0);
+    next()
+})
+
+export default router

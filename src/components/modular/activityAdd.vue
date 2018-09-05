@@ -51,7 +51,7 @@ import { uploadPath } from '@/path/path'
 import { getCookie, setCookie } from "@/util/cookie";
 import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
 import { addActivity } from "src/api/activity/index";//新增活动
-/*import { queryVolunteerTeam } from "api/activity/index";//查看详情*/
+import { queryActivity } from "api/activity/index";//查看详情
 import { uploadFile } from "api/upload/index";
 
 export default {
@@ -127,9 +127,31 @@ export default {
 		},
 		//根据uuid查看详情
 		queryVolunteerTeamPost() {
-			queryVolunteerTeam({ uuid: this.$route.query.uuid }).then(data => {
+			queryActivity({ uuid: this.$route.query.uuid }).then(data => {
 				if (data.data.status == 200) {
-					console.log(data.data)
+					this.ruleForm.name = data.data.data.name
+					this.ruleForm.cover = data.data.data.cover
+					this.ruleForm.activity_starttime = [data.data.data.activity_starttime, data.data.data.activity_endtime]
+					this.ruleForm.sign_starttime = [data.data.data.sign_starttime, data.data.data.sign_endtime]
+					this.ruleForm.limit_people = data.data.data.limit_people
+
+					this.ruleForm.activity_place = data.data.data.activity_place
+					this.ruleForm.activity_detail = data.data.data.activity_detail
+					this.ruleForm.volunteer_team_id = ''+data.data.data.limit_people+''
+
+
+					// ruleForm: {
+					// 	name: '',
+					// 	cover: '',
+					// 	activity_starttime: '',
+					// 	activity_endtime: '',
+					// 	sign_starttime: '',
+					// 	sign_endtime: '',
+					// 	limit_people: '',
+					// 	activity_place: '',
+					// 	activity_detail: '',
+					// 	volunteer_team_id: ''
+					// },
 				}
 			})
 		},

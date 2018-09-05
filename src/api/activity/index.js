@@ -21,3 +21,21 @@ export function addActivity(params) {
         })
     })
 }
+
+/*活动详情*/
+export function queryActivity(params) {
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'activity/queryActivity.do', params).then(data => {
+            resolve(data)
+        })
+    })
+}
+
+/*删除*/
+export function deleteActivity(params) {
+    return new Promise((resolve, reject) => {
+        axiosToken.post(path + 'activity/deleteActivity.do', params).then(data => {
+            resolve(data)
+        })
+    })
+}

@@ -30,6 +30,7 @@ import MyDropDown from '@/components/common/MyDropDown'
 import { getCookie, setCookie } from "@/util/cookie";
 import { queryActivityForManager } from "api/activity/index";
 import { queryTypeDetailByTypeCode } from "api/volunteer/index";//查询服务类型明细
+import { deleteActivity } from "api/activity/index";
 export default {
     components: {
         vtable: table
@@ -49,15 +50,15 @@ export default {
             columns: [
                 {
                     prop: "name",
-                    label: "服务队名称",
+                    label: "活动名称",
                 },
                 {
-                    prop: "type_name",
-                    label: "服务类别",
+                    prop: "activity_starttime",
+                    label: "活动开始时间",
                 },
                 {
-                    prop: "create_time",
-                    label: "成立时间",
+                    prop: "activity_endtime",
+                    label: "活动结束时间",
                     width: ""
                 },
                 {
@@ -134,8 +135,26 @@ export default {
                 }
             })
         },
-        del(){
-
+        del(obj){
+            this.$confirm('是否删除该活动?', '温馨提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deleteActivity({uuid: obj}).then(data => {
+                    if(data.data.status==200){
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: '500',
+                            onClose: function(){
+                                window.location.reload();
+                            }
+                        });
+                    }
+                })
+            }).catch(() => {
+            });
         }
     }
 }
