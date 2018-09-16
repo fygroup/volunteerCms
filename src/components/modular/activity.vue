@@ -53,6 +53,14 @@ export default {
                     label: "活动名称",
                 },
                 {
+                    prop: "limit_people",
+                    label: "报名总数",
+                },
+                {
+                    prop: "activity_place",
+                    label: "报名地点",
+                },
+                {
                     prop: "activity_starttime",
                     label: "活动开始时间",
                 },

@@ -27,7 +27,9 @@ export default {
 			if (source.status != 200) {
 				this.$alert(source.msg, '温馨提示',
 					{
-						confirmButtonText: '确定', callback: action => { }
+						confirmButtonText: '确定', callback: action => {
+							window.location.reload();
+						}
 					});
 			}
 			return respone
@@ -41,7 +43,9 @@ export default {
 			if (source.status != 200) {
 				this.$alert(source.msg, '温馨提示',
 					{
-						confirmButtonText: '确定', callback: action => { }
+						confirmButtonText: '确定', callback: action => {
+							window.location.reload();
+						}
 					});
 			}
 			return respone

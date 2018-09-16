@@ -51,7 +51,7 @@ import table from '@/components/common/table'
 import MyDropDown from '@/components/common/MyDropDown'
 import { getCookie, setCookie } from "@/util/cookie";
 import { queryResidentList, upadteResident } from "api/resident/index";
-import { exportExcel } from "api/upload/index";
+import { exportExcel, importExcel } from "api/upload/index";
 export default {
     components: {
         vtable: table
@@ -190,16 +190,13 @@ export default {
             this.$refs.upload.submit();
         },
         handleRemove(file, fileList) {
-            debugger
             console.log(file, fileList);
         },
         handlePreview(file) {
-            debugger
             console.log(file);
         },
         // 上传图片前
         beforeAvatarUpload(file) {
-            debugger
             const isLt2M = file.size / 1024 / 1024 < 10;
             if (!isLt2M) {
             this.$message.error('上传头像图片大小不能超过 10MB!');
@@ -207,23 +204,18 @@ export default {
             return isLt2M;
         },
         handleAvatarSuccess(res, file) {
-            debugger
-            if (res.code == 200) {
-            this.$message({
-                message: '上传成功！',
-                type: 'success',
-                duration: '500',
-                onClose: function () {
-                window.location.reload();
+            importExcel(file.raw).then(data => {
+                if(data.data.status==200){
+                    this.$message({
+                        message: '导入成功',
+                        type: 'success',
+                        duration: '500',
+                        onClose: function(){
+                            window.location.reload();
+                        }
+                    });
                 }
-            });
-            } else {
-            this.$alert(res.msg, '温馨提示', {
-                confirmButtonText: '确定', callback: action => {
-                window.location.reload();
-                }
-            });
-            }
+            })
         },
     }
 }

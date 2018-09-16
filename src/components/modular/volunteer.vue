@@ -51,9 +51,42 @@ export default {
                     label: "服务类别",
                 },
                 {
+                    prop: "join_type",
+                    label: "加入方式",
+                },
+                {
+                    prop: "peoplenumnber",
+                    label: "加入人数",
+                },
+                {
                     prop: "create_time",
                     label: "成立时间",
                     width: ""
+                },
+                {
+                    prop: "recruitstatus",
+                    label: "状态",
+                    render: function(createElement) {
+                        if(this.row.recruitstatus==1){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '未开始',
+                                }
+                            })
+                        }else if(this.row.recruitstatus==2){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '进行中',
+                                }
+                            })
+                        }else if(this.row.recruitstatus==3){
+                            return createElement('span', {
+                                domProps: {
+                                    innerHTML: '已结束',
+                                }
+                            })
+                        }
+                    }
                 },
                 {
                     prop: "",
@@ -93,7 +126,7 @@ export default {
         }
     },
     mounted() {
-        this.queryVolunteerListPost(this.pageNum, '', '');
+        this.queryVolunteerListPost(this.pageNum, '', '153049720572388');
         this.queryTypeDetailByTypeCodePost();
     },
     methods: {

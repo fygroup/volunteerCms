@@ -19,3 +19,17 @@ export function uploadFile(params) {
         })
     })
 }
+
+
+/*查询用户列表*/
+export function importExcel(params) {
+    return new Promise((resolve, reject) => {
+        let param = new FormData();
+        if (params.length == undefined) {
+            param.append('file', params);
+        }
+        axiosToken.post(path + 'excel/importExcel.do', param).then(data => {
+            resolve(data)
+        })
+    })
+}
