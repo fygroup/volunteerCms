@@ -126,7 +126,7 @@ export default {
         }
     },
     mounted() {
-        this.queryVolunteerListPost(this.pageNum, '', '153049720572388');
+        this.queryVolunteerListPost(this.pageNum, '');
         this.queryTypeDetailByTypeCodePost();
     },
     methods: {
@@ -144,7 +144,6 @@ export default {
                 pageSize: this.pageSize,
                 pageNum: pageNum,
                 name: name,
-                type: type,
             };
             queryVolunteerTeamList(params).then(data => {
                 if(data.data.status==200){

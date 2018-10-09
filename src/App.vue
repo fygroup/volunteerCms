@@ -34,7 +34,6 @@ export default {
 			}
 			return respone
 		}, err => {
-			Toast(err)
 		}
 		)
 		//上传校验
@@ -50,7 +49,6 @@ export default {
 			}
 			return respone
 		}, err => {
-			Toast(err)
 		}
 		)
 	}
