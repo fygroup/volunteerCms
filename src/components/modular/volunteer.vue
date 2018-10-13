@@ -2,7 +2,7 @@
     <div class="__volunteer">
         <div class="formBox">
             <el-form :inline="true" ref="formInline" :model="formInline" class="demo-form-inline">
-                <el-form-item label="服务队名称：">
+                <el-form-item label="志愿队名称：">
                     <el-input v-model="formInline.real_name" placeholder="请输入名称"></el-input>
                 </el-form-item>
                 <el-form-item>

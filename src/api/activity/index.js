@@ -22,6 +22,15 @@ export function addActivity(params) {
     })
 }
 
+/*修改活动*/
+export function updateActivity(params) {
+  return new Promise((resolve, reject) => {
+    axiosToken.post(path + 'activity/updateActivity.do', params).then(data => {
+      resolve(data)
+    })
+  })
+}
+
 /*活动详情*/
 export function queryActivity(params) {
     return new Promise((resolve, reject) => {

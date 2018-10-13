@@ -2,7 +2,7 @@
     <div class="__activity">
         <div class="formBox">
             <el-form :inline="true" ref="formInline" :model="formInline" class="demo-form-inline">
-                <el-form-item label="服务队名称：">
+                <el-form-item label="活动名称：">
                     <el-input v-model="formInline.real_name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
                 <el-form-item label="服务类别：">

@@ -2,7 +2,6 @@ import { path } from '@/path/path'
 import axiosToken from '@/util/mutipartAxios'
 import axiosTokenGet from '@/util/axiosTokenGet'
 
-
 /*查询用户列表*/
 export function uploadFile(params) {
     return new Promise((resolve, reject) => {
