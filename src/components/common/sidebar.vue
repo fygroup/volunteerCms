@@ -37,6 +37,7 @@ export default {
                 { name: '活动管理', icon: 'el-icon-location', path: '/home/activity' },
                 { name: '预约管理', icon: 'el-icon-location', path: '/home/order' },
                 { name: '热线管理', icon: 'el-icon-location', path: '/home/hotline' },
+              { name: '首页轮播图', icon: 'el-icon-location', path: '/home/pictures' },
             ]
         }
     },

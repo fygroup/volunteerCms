@@ -61,8 +61,8 @@
   import {getCookie, setCookie} from "@/util/cookie";
   import {queryTypeDetailByTypeCode} from "api/volunteer/index";//查询服务类型明细
   import {addVolunteerTeam} from "api/volunteer/index";//新增志愿者团队
-  import {queryVolunteerTeam} from "api/volunteer/index";//查看详情
-  import {updateVolunteerTeam} from "api/volunteer/index";//查看详情
+  import {queryVolunteerTeam} from "src/api/volunteer/index";//查看详情
+  import {updateVolunteerTeam} from "src/api/volunteer/index";//查看详情
   import {uploadFile} from "api/upload/index";
 
   export default {
@@ -72,7 +72,7 @@
     data() {
       return {
         typeCodeList: [],//查询服务类型明细
-        upload2: {"id": "test2"},
+        upload2: {"id": "test2", multiple: 'multiple'},
         ruleForm: {
           name: '',
           type: '',
@@ -137,8 +137,12 @@
             this.ruleForm.introduction = data.data.data.introduction
 
             if (data.data.data.pictureList.length > 0) {
-              if (data.data.data.pictureList[0].url != '') {
-                this.$refs.upload.dataListsingle = data.data.data.pictureList[0].url
+              if (data.data.data.pictureList.length>0) {
+                let dataListdouble = [];
+                for(let i=0;i<data.data.data.pictureList.length;i++){
+                  dataListdouble.push(data.data.data.pictureList[i].url)
+                }
+                this.$refs.upload.dataListdouble = dataListdouble
               }
             }
           }
@@ -155,11 +159,12 @@
       },
       paramsList() {
         if (this.$route.query.type == 1) {
-          let cover;
-          if(this.$refs.upload.dataListsingle=='static/upload/upload-120-120.png'){
-            cover = []
-          }else {
-            cover = [{url: this.$refs.upload.dataListsingle}]
+          var cover = [];
+          if(this.$refs.upload.dataListdouble.length>0){
+            for(var i=0;i<this.$refs.upload.dataListdouble.length;i++){
+              let urls = this.$refs.upload.dataListdouble[i]
+              cover.push({url: urls})
+            }
           }
           let params = {
             name: this.ruleForm.name,
@@ -186,11 +191,12 @@
             }
           })
         } else {
-          let cover;
-          if(this.$refs.upload.dataListsingle=='static/upload/upload-120-120.png'){
-            cover = []
-          }else {
-            cover = [{url: this.$refs.upload.dataListsingle}]
+          var cover = [];
+          if(this.$refs.upload.dataListdouble.length>0){
+            for(var i=0;i<this.$refs.upload.dataListdouble.length;i++){
+              let urls = this.$refs.upload.dataListdouble[i]
+              cover.push({url: urls})
+            }
           }
           let params = {
             uuid: this.$route.query.uuid,
@@ -218,7 +224,6 @@
             }
           })
         }
-
       },
     }
   }

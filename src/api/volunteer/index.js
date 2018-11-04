@@ -1,6 +1,6 @@
 import { path } from '@/path/path'
-import axiosToken from '@/util/axiosToken'
-import axiosTokenJson from '@/util/axiosTokenJson'
+import axiosToken from 'src/util/axiosToken'
+import axiosTokenJson from 'src/util/axiosTokenJson'
 
 
 /*查询志愿者团队列表*/

@@ -48,23 +48,22 @@
             if (file.files.length > 0) {
               var from = [];
               for (var i = 0; i < file.files.length; i++) {
-                from.push(file.files[i]);
+                uploadFile(file.files[i]).then(data => {
+                  if(data.status==200){
+                    this.dataListdouble = data.data.data
+                  }
+                })
               }
-              uploadFile(from).then(data => {
-                if(data.status==200){
-                  this.dataListdouble = data.data.data
-                }
-              })
+
             }
           }else{
             if (file.files.length > 0) {
               var from = [];
               for (var i = 0; i < file.files.length; i++) {
-                from.push(file.files[i]);
                 if(this.dataListdouble.length>=this.upload.leng){
                   alert("最多添加"+this.upload.leng+"个");
                 }else{
-                  uploadFile(from).then(data => {
+                  uploadFile(file.files[i]).then(data => {
                     if(data.status==200){
                       this.dataListdouble.push(data.data.data)
                     }
